@@ -20,12 +20,16 @@ const Login = () => {
 
             axios.post('https://geoprofs-backend.test/api/auth/login', data)
                 .then(response => {
-                    console.log(response)
+                    console.log(response.data.access_token)
+                    localStorage.setItem('token', response.data.access_token);
                     setMessage(response)
                 })
                 .catch(error => {
                     console.error('Error:', error)
                     if (error.response.status === 401) {
+                        setError('Email or password is incorrect')
+                        return;
+                    } else if(error.response.status === 422) {
                         setError('Email or password is incorrect')
                         return;
                     }
