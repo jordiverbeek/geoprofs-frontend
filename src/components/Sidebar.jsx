@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDays, faUserGroup, faGear, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar = () => {
     const [active, setActive] = useState(true);
-
+    const navigate = useNavigate();
     return (
         <section className='vlx-sidebar'>
             <div className='container'>
                 <div className='container-top'>
-                    <h1>Verlof Systeem</h1>
+                    <h1 onClick={() => navigate('/')}>
+                        Verlof Systeem
+                    </h1>
                     <Link className={`a ${active ? 'active' : ''}`} to={'/werknemers'} onClick={() => setActive(!active)}>
                         <FontAwesomeIcon className='icons' icon={faUserGroup} />
                         Werknemers
