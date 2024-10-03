@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 const Login = () => {
@@ -7,6 +7,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
+    const navigate = useNavigate();
 
     const sendForm = () => {
         if (password.length < 8) {
@@ -17,23 +18,21 @@ const Login = () => {
                 email: email,
                 password: password
             }
-
-            axios.post('https://geoprofs-backend.test/api/auth/login', data)
+            axios.post('https://geoprofs-backend.test/api/auth/login', data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                }
+            })
                 .then(response => {
-                    console.log(response.data.access_token)
+                    console.log(response.data.access_token);
                     localStorage.setItem('token', response.data.access_token);
-                    setMessage(response)
+                    navigate('/');
                 })
                 .catch(error => {
-                    console.error('Error:', error)
-                    if (error.response.status === 401) {
-                        setError('Email or password is incorrect')
-                        return;
-                    } else if(error.response.status === 422) {
-                        setError('Email or password is incorrect')
-                        return;
-                    }
-                })
+                    console.error('Error:', error);
+                });
+
         }
     }
 

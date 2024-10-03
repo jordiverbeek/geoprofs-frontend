@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDays, faUserGroup, faGear, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar = () => {
-    const [active, setActive] = useState(true);
+    const [active, setActive] = useState(false);
     const navigate = useNavigate();
 
     return (
