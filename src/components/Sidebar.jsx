@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate  } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDays, faUserGroup, faGear, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 

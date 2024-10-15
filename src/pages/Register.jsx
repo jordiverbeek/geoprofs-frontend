@@ -28,27 +28,27 @@ const Register = () => {
 
         // Check if passwords match
 
-            // Handle form submission (e.g., API call)
-            console.log('Form Submitted', formData);
+        // Handle form submission (e.g., API call)
+        console.log('Form Submitted', formData);
 
-            // Clear the form fields after submission
-            setFormData({
-                firstname: '',
-                lastname: '',
-                email: '',
-                password: '',
-                bsn: '',
-                date_of_service: '',
-                sick_days: '',
-                vacation_days: '',
-                personal_days: '',
-                max_vacation_days: ''
+        // Clear the form fields after submission
+        setFormData({
+            firstname: '',
+            lastname: '',
+            email: '',
+            password: '',
+            bsn: '',
+            date_of_service: '',
+            sick_days: '',
+            vacation_days: '',
+            personal_days: '',
+            max_vacation_days: ''
 
-            });
+        });
 
-            // Show success message
-            setSuccessMessage('Registration successful!');
-        
+        // Show success message
+        setSuccessMessage('Registration successful!');
+
     };
 
     return (
@@ -96,7 +96,7 @@ const Register = () => {
                         onChange={handleChange}
                         required
                     />
-                    <input 
+                    <input
                         type="date"
                         name="date_of_service"
                         placeholder="Date of service"
@@ -104,7 +104,7 @@ const Register = () => {
                         onChange={handleChange}
                         required
                     />
-                    <input 
+                    <input
                         type="number"
                         name="sick_days"
                         placeholder="Sick days"
@@ -112,7 +112,7 @@ const Register = () => {
                         onChange={handleChange}
                         required
                     />
-                    <input 
+                    <input
                         type="number"
                         name="vacation_days"
                         placeholder="Vacation days"
@@ -120,7 +120,7 @@ const Register = () => {
                         onChange={handleChange}
                         required
                     />
-                    <input 
+                    <input
                         type="number"
                         name="personal_days"
                         placeholder="Personal days"
@@ -128,7 +128,7 @@ const Register = () => {
                         onChange={handleChange}
                         required
                     />
-                    <input 
+                    <input
                         type="number"
                         name="max_vacation_days"
                         placeholder="Max vacation days"
@@ -137,10 +137,8 @@ const Register = () => {
                         required
                     />
 
-                    {/* Display error message */}
                     {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
-                    {/* Display success message */}
                     {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
 
                     <button type="submit">Register</button>

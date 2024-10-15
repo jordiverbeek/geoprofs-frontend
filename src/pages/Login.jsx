@@ -41,7 +41,7 @@ const Login = () => {
     }, [])
 
     return (
-        <section className='vlx-login'>
+        <section className='vlx-login vlx-auth-page'>
             <div className='container'>
                 <div className='card'>
                     <h1>LOGIN</h1>

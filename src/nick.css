@@ -8,9 +8,6 @@ h1 { font-size: 24px; margin-bottom: 20px; color: #333; }
 
 
 
-
-
-
 .dashboard { width: 100%; display: flex; flex-direction: column; gap: 30px; }
 .dashboard .widgets { display: flex; justify-content: space-between; gap: 30px; }
 .dashboard .widget { background-color: white; border-radius: 8px; padding: 16px; min-height: 150px; width: 25%; text-align: center; box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25); display: grid; place-content: center; }

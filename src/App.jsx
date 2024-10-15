@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Sidebar from './components/Sidebar';
+import Register from "./pages/Register";
 
 function App() {
     const [showSidebar, setShowSidebar] = useState(true);
@@ -41,11 +42,9 @@ function AppContent({ showSidebar, setShowSidebar, isloggedin }) {
 
             <section className='vlx-body'>
                 <Routes>
-                    {isloggedin 
-                        ? <Route path="/" element={<Home />} /> 
-                        : <Route path="/auth/login" element={<Login />} />
-                    }
+                    {isloggedin ? '' : <Route path="/auth/login" element={<Login />} />}
                     <Route path="/auth/login" element={<Login />} />
+                    <Route path="/auth/register" element={<Register />} />
                 </Routes>
             </section>
         </>

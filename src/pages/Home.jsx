@@ -1,9 +1,20 @@
 import React from 'react';
 
 const Home = () => {
+    const [token, setToken] = useState('');
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        if (storedToken) {
+            setToken(storedToken);
+        }
+    }, [localStorage.getItem('token')]);
+
+    console.log(token);
+
+
     return (
         <div className='dashboard'>
-            
             <div className='widgets'>
                 <div className='widget'>
                     <h3>Aanwezigen</h3>
@@ -22,9 +33,7 @@ const Home = () => {
                     <p>23</p>
                 </div>
             </div>
-
             <div className='content'>
-                {/* Content below the stats, if any */}
             </div>
 
         </div>
