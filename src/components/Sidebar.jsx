@@ -8,7 +8,7 @@ const Sidebar = () => {
     const navigate = useNavigate();
 
     return (
-        <section className='vlx-sidebar'>
+        <section data-testid="testSidebar" className='vlx-sidebar'>
             <div className='container'>
                 <div className='container-top'>
                     <h1 onClick={() => navigate('/')}>Verlof Systeem</h1>
