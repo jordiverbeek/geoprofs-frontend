@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Home = () => {
     const [token, setToken] = useState('');
@@ -14,7 +14,7 @@ const Home = () => {
 
 
     return (
-        <div className='dashboard'>
+        <div data-testid='test-home' className='dashboard'>
             <div className='widgets'>
                 <div className='widget'>
                     <h3>Aanwezigen</h3>

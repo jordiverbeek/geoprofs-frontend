@@ -12,10 +12,10 @@ function App() {
     return (
         <section className='vlx-main-page'>
             <BrowserRouter>
-                <AppContent 
-                    showSidebar={showSidebar} 
-                    setShowSidebar={setShowSidebar} 
-                    isloggedin={isloggedin} 
+                <AppContent
+                    showSidebar={showSidebar}
+                    setShowSidebar={setShowSidebar}
+                    isloggedin={isloggedin}
                 />
             </BrowserRouter>
         </section>
@@ -23,7 +23,7 @@ function App() {
 }
 
 function AppContent({ showSidebar, setShowSidebar, isloggedin }) {
-    const location = useLocation(); 
+    const location = useLocation();
 
     useEffect(() => {
         const url = location.pathname;
@@ -43,8 +43,16 @@ function AppContent({ showSidebar, setShowSidebar, isloggedin }) {
             <section className='vlx-body'>
                 <Routes>
                     {isloggedin ? '' : <Route path="/auth/login" element={<Login />} />}
+
+                    {/* Pages */}
+                    <Route path="/" element={<Home />} />
+
+
+                    {/* Authentication */}
                     <Route path="/auth/login" element={<Login />} />
                     <Route path="/auth/register" element={<Register />} />
+
+
                 </Routes>
             </section>
         </>
