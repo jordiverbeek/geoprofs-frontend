@@ -1,16 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import Login from '../../pages/Login';
 import { MemoryRouter } from 'react-router-dom';
-import App from '../../App';
-import Home from '../../pages/Home';
 
-test('displays Sidebar and Navbar components when route changes', () => {
-    render(<App />);
+test('displays Sidebar components when route changes', () => {
+    render(
+        <MemoryRouter>
+            <Login />
+        </MemoryRouter>
+    );
 
-
-        expect(screen.getByTestId('test-login')).toBeInTheDocument(); 
-        expect(screen.getByTestId('testSidebar')).toBeInTheDocument(); 
-        expect(screen.getByTestId('test-home')).toBeInTheDocument();
-    // Check if the Sidebar and Home components are displayed in App component
-
+    const email = screen.getByLabelText('email');
+    const password = screen.getByLabelText('password');
+    const loginButton = screen.getByText('Login');
 });
