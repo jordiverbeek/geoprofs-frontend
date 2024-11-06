@@ -18,7 +18,7 @@ const Login = () => {
                 email: email,
                 password: password
             }
-            axios.post('https://geoprofs-backend.test/api/auth/login', data, {
+            axios.post('https://geoprofs-backend.vacso.cloud/api/auth/login', data, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*',
