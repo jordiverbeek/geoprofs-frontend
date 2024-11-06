@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const Register = () => {
-    const [formData, setFormData] = useState({
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-    });
+    const [formData, setFormData] = useState('');
 
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,40 +19,46 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Reset messages
         setErrorMessage('');
         setSuccessMessage('');
-
-        // Check if passwords match
-
-        // Handle form submission (e.g., API call)
         console.log('Form Submitted', formData);
 
-        // Clear the form fields after submission
-        setFormData({
-            firstname: '',
-            lastname: '',
-            email: '',
-            password: '',
-            bsn: '',
-            date_of_service: '',
-            sick_days: '',
-            vacation_days: '',
-            personal_days: '',
-            max_vacation_days: ''
+        axios.post('https://geoprofs-backend.vacso.cloud/host/api/users/create', formData, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            }
+        })
+            .then((response) => {
+                console.log('Registration successful', response);
+                setSuccessMessage('Registration successful');
+            })
+            .catch((error) => {
+                console.error('Registration error', error);
+                setErrorMessage('Registration failed');
+            });
+    
 
-        });
-
-        // Show success message
-        setSuccessMessage('Registration successful!');
+            setFormData({
+                firstname: '',
+                lastname: '',
+                email: '',
+                password: '',
+                bsn: '',
+                date_of_service: '',
+                sick_days: '',
+                vacation_days: '',
+                personal_days: '',
+                max_vacation_days: ''
+            });
 
     };
 
     return (
         <div>
-            <div className='container-form'>
+            <div data-testid="testRegister" className='container-form'>
                 <h1>Register</h1>
-                <form onSubmit={handleSubmit} className='register-from'>
+                <div className='register-from'>
                     <input
                         type="text"
                         name="firstname"
@@ -141,8 +144,8 @@ const Register = () => {
 
                     {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
 
-                    <button type="submit">Register</button>
-                </form>
+                    <button type="submit" onClick={handleSubmit}>Register</button>
+                </div>
             </div>
         </div>
     );
