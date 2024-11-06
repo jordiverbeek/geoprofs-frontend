@@ -23,7 +23,7 @@ const Register = () => {
         setSuccessMessage('');
         console.log('Form Submitted', formData);
 
-        axios.post('https://geoprofs-backend.vacso.cloud/host/api/users/create', formData, {
+        axios.post('https://geoprofs-backend.vacso.cloud/api/users/create', formData, {
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
