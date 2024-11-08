@@ -26,7 +26,25 @@ const Register = () => {
         setErrorMessage('');
         setSuccessMessage('');
 
+<<<<<<< Updated upstream
         // Check if passwords match
+=======
+        axios.post('https://geoprofs-backend.vacso.cloud/host/api/users/create', formData, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            }
+        })
+            .then((response) => {
+                console.log('Registration successful', response);
+                setSuccessMessage('Registration successful');
+            })
+            .catch((error) => {
+                console.error('Registration error', error);
+                setErrorMessage('Registration failed');
+            });
+    
+>>>>>>> Stashed changes
 
             // Handle form submission (e.g., API call)
             console.log('Form Submitted', formData);
