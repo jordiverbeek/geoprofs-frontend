@@ -52,26 +52,28 @@ const Register = () => {
     };
 
     return (
-        <div>
+        <section className='vlx-register vlx-auth-page'>
             <div className='container-form'>
-                <h1>Register</h1>
                 <form onSubmit={handleSubmit} className='register-from'>
-                    <input
-                        type="text"
-                        name="firstname"
-                        placeholder="Firstname"
-                        value={formData.firstname}
-                        onChange={handleChange}
-                        required
-                    />
-                    <input
-                        type="text"
-                        name="lastname"
-                        placeholder="Lastname"
-                        value={formData.lastname}
-                        onChange={handleChange}
-                        required
-                    />
+                    <h1>Register</h1>
+                    <div className='firstname-lastname'>
+                        <input
+                            type="text"
+                            name="firstname"
+                            placeholder="Firstname"
+                            value={formData.firstname}
+                            onChange={handleChange}
+                            required
+                        />
+                        <input
+                            type="text"
+                            name="lastname"
+                            placeholder="Lastname"
+                            value={formData.lastname}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
                     <input
                         type="email"
                         name="email"
@@ -104,38 +106,41 @@ const Register = () => {
                         onChange={handleChange}
                         required
                     />
-                    <input
-                        type="number"
-                        name="sick_days"
-                        placeholder="Sick days"
-                        value={formData.sick_days}
-                        onChange={handleChange}
-                        required
-                    />
-                    <input
-                        type="number"
-                        name="vacation_days"
-                        placeholder="Vacation days"
-                        value={formData.vacation_days}
-                        onChange={handleChange}
-                        required
-                    />
-                    <input
-                        type="number"
-                        name="personal_days"
-                        placeholder="Personal days"
-                        value={formData.personal_days}
-                        onChange={handleChange}
-                        required
-                    />
-                    <input
-                        type="number"
-                        name="max_vacation_days"
-                        placeholder="Max vacation days"
-                        value={formData.max_vacation_days}
-                        onChange={handleChange}
-                        required
-                    />
+                    <div className='verlof-dagen'>
+
+                        <input
+                            type="number"
+                            name="sick_days"
+                            placeholder="Sick days"
+                            value={formData.sick_days}
+                            onChange={handleChange}
+                            required
+                        />
+                        <input
+                            type="number"
+                            name="vacation_days"
+                            placeholder="Vacation days"
+                            value={formData.vacation_days}
+                            onChange={handleChange}
+                            required
+                        />
+                        <input
+                            type="number"
+                            name="personal_days"
+                            placeholder="Personal days"
+                            value={formData.personal_days}
+                            onChange={handleChange}
+                            required
+                        />
+                        <input
+                            type="number"
+                            name="max_vacation_days"
+                            placeholder="Max vacation days"
+                            value={formData.max_vacation_days}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
 
                     {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
@@ -144,7 +149,7 @@ const Register = () => {
                     <button type="submit">Register</button>
                 </form>
             </div>
-        </div>
+        </section>
     );
 };
 
