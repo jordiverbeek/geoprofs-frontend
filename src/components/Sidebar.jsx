@@ -12,16 +12,20 @@ const Sidebar = () => {
             <div className='container'>
                 <div className='container-top'>
                     <h1 onClick={() => navigate('/')}>Verlof Systeem</h1>
-                    <Link className={`a ${active ? 'active' : ''}`} to={'/werknemers'} onClick={() => setActive(!active)}>
+                    <Link to={'/'}>
+                        <FontAwesomeIcon className='icons' icon={faCalendarDays} />
+                        Dashboard
+                    </Link>
+                    <a className={`a ${active ? 'active' : ''}`} onClick={() => setActive(!active)}>
                         <FontAwesomeIcon className='icons' icon={faUserGroup} />
                         Werknemers
                         <span className={`icons-dropdown ${active ? 'active' : ''}`}>
                             <FontAwesomeIcon icon={faChevronDown} />
                         </span>
-                    </Link>
+                    </a>
                     <div className={`dropdown ${active ? 'active' : ''}`}>
-                        <Link to={'/werknemers'}>Werknemers</Link>
-                        <Link to={'/werknemers/add'}>Toevoegen</Link>
+                        <Link to={'/werknemers'} onClick={(() => setActive(''))}>Werknemers</Link>
+                        <Link to={'/werknemers/add'} onClick={(() => setActive(''))}>Toevoegen</Link>
                     </div>
                     <Link to={'/planning'}>
                         <FontAwesomeIcon className='icons' icon={faCalendarDays} />
