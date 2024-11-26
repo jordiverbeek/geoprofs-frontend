@@ -16,13 +16,14 @@ const Login = () => {
         } else {
             const data = {
                 email: email,
-                password: password
+                password: password  
             }
             axios.post('https://geoprofs-backend.test/api/auth/login', data, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*',
                 }
+
             })
                 .then(response => {
                     console.log(response.data.access_token);
