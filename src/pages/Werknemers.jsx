@@ -2,16 +2,15 @@ import React from 'react';
 
 const werknemers = [
     { naam: "Nick Verbeek", email: "nick@geoprofs.com", groep: "GeoICT > Ontwikkeling" },
-    { naam: "Jordi Josten", email: "Jordi@geoprofs.com", groep: "GeoICT > Ontwikkeling" },
-    { naam: "Jordi Josten", email: "Jordi@geoprofs.com", groep: "GeoICT > Ontwikkeling" },
-    { naam: "Jordi Josten", email: "Jordi@geoprofs.com", groep: "GeoICT > Ontwikkeling" },
-    { naam: "Jordi Josten", email: "Jordi@geoprofs.com", groep: "GeoICT > Ontwikkeling" },
-    { naam: "Jordi Josten", email: "Jordi@geoprofs.com", groep: "GeoICT > Ontwikkeling" },
-    { naam: "Jordi Josten", email: "Jordi@geoprofs.com", groep: "GeoICT > Ontwikkeling" },
-    { naam:     "Jordi Josten", email: "Jordi@geoprofs.com", groep: "GeoICT > Ontwikkeling" },
     { naam: "Finn Swanenberg", email: "Finn@geoprofs.com", groep: "GeoICT > Scanning" },
-    // Voeg meer werknemers toe hier...
+    { naam: "Finn Swanenberg", email: "Finn@geoprofs.com", groep: "GeoICT > Testing" },
 ];
+
+const url = new URL("https://geoprofs-backend.vacso.cloud/api/users");
+
+const headers = {
+    "Authorization": "Bearer 8hIKDjTaA6aMLLKb0eo3lOBqKBNhwBHWyx8CKFy3f9b16dd8",
+}
 
 const WerknemerKaart = ({ naam, email }) => (
     <div className="werknemer-kaart">
@@ -55,8 +54,8 @@ const Werknemers = () => {
     }, {});
 
     return (
-        <div className="app">
-            <header className="app-header">
+        <section className='werknemers'>
+            <header className="header">
                 <h1>Werknemers</h1>
                 <button className="toevoegen-knop">Werknemer toevoegen</button>
             </header>
@@ -67,7 +66,7 @@ const Werknemers = () => {
                     werknemers={groepWerknemers}
                 />
             ))}
-        </div>
+        </section>
     );
 };
 
