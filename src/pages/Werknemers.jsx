@@ -1,16 +1,26 @@
 import React from 'react';
 
+// const url1 = new URL("https://geoprofs-backend.test/api/user");
+const url = new URL("https://geoprofs-backend.vacso.cloud/api/users");
+
+const headers = {
+    "Authorization": "Bearer f4bQSBpfssoJEsvhdzqyI4VYQGCLI8gTcKhkbhJo297ef086",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+}
+
+fetch(url, {
+    Method: "GET",
+    headers,
+}).then(respones => respones.json()).then(data => console.log(data));
+
 const werknemers = [
     { naam: "Nick Verbeek", email: "nick@geoprofs.com", groep: "GeoICT > Ontwikkeling" },
     { naam: "Finn Swanenberg", email: "Finn@geoprofs.com", groep: "GeoICT > Scanning" },
     { naam: "Finn Swanenberg", email: "Finn@geoprofs.com", groep: "GeoICT > Testing" },
+b 
+        
 ];
-
-const url = new URL("https://geoprofs-backend.vacso.cloud/api/users");
-
-const headers = {
-    "Authorization": "Bearer 8hIKDjTaA6aMLLKb0eo3lOBqKBNhwBHWyx8CKFy3f9b16dd8",
-}
 
 const WerknemerKaart = ({ naam, email }) => (
     <div className="werknemer-kaart">
