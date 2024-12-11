@@ -15,30 +15,38 @@ function AppWrapper() {
     );
 }
 
+
 function App() {
     const [showSidebar, setShowSidebar] = useState(true);
     const navigate = useNavigate();
-    const [token, setToken] = useState('');
+    const [token, setToken] = useState(null);
 
+    
     // Check if user is authenticated
     useEffect(() => {
+        // Update token state before running logic
+        Cookies.set("bearer_token", "dankjwhdkuawhdh");
+        setToken(Cookies.get("bearer_token"));  
 
         const url = location.pathname;
-        let regex = /^\/\//;
+        let regex = /^\/auth\/(login|register)$/;
 
         console.log('Running auth check');
-        setToken(Cookies.get("bearer_token"));
         console.log("Token: ", token);
 
         if (!token) {
-            console.log("Token not found going to auth");
+            console.log("Token not found, redirecting to login");
             navigate("/auth/login");
-        } else if (regex.test(url)) {
-            console.log("Token found going to home");
-            navigate("/");
+        } else {
+            if (regex.test(url)) {
+                console.log("Token found and on auth route, redirecting to home");
+                navigate("/");
+            } else {
+                console.log("Token found and not on auth route");
+            }
         }
-        
-    }, [navigate]);
+    }, [token, navigate]);
+
 
     return (
         <section className="vlx-main-page">

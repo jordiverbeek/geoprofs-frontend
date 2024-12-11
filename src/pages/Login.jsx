@@ -30,9 +30,11 @@ const Login = () => {
             })
                 .then(response => {
                     setLoading(false);
+                    
                     Cookies.set('bearer_token', response.data.access_token, {
                         expires: 1
                     }); 
+                    
                     console.log('Cookie set:', Cookies.get('bearer_token'));
                     navigate('/');
                 })
