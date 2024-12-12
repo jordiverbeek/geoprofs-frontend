@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Cookies from "js-cookie";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -21,12 +22,33 @@ function App() {
     const navigate = useNavigate();
     const [token, setToken] = useState(null);
 
-    
+
+    const checkToken = () => {
+        const token = Cookies.get("bearer_token");
+        axios.post("", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log("User data: ", response.data);
+                
+            })
+            .catch((error) => {
+                console.error("Error: ", error);
+            });
+
+        console.log("Token: ", token);
+        return token;
+    }
+
+
     // Check if user is authenticated
     useEffect(() => {
         // Update token state before running logic
-        Cookies.set("bearer_token", "dankjwhdkuawhdh");
-        setToken(Cookies.get("bearer_token"));  
+        Cookies.set("bearer_token", "test_token");
+        setToken(Cookies.get("bearer_token"));
+        checkToken();
 
         const url = location.pathname;
         let regex = /^\/auth\/(login|register)$/;
