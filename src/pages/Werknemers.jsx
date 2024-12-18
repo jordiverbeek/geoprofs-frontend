@@ -1,4 +1,6 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';   
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 // const url1 = new URL("https://geoprofs-backend.test/api/user");
 const url = new URL("https://geoprofs-backend.vacso.cloud/api/users");
@@ -24,7 +26,7 @@ const werknemers = [
     { naam: "Nick Verbeek", email: "nick@geoprofs.com", groep: "GeoICT > Ontwikkeling" },
     { naam: "Finn Swanenberg", email: "Finn@geoprofs.com", groep: "GeoICT > Scanning" },
     { naam: "Finn Swanenberg", email: "Finn@geoprofs.com", groep: "GeoICT > Testing" },
-        
+
 ];
 
 const WerknemerKaart = ({ naam, email }) => (
@@ -71,8 +73,11 @@ const Werknemers = () => {
     return (
         <section className='werknemers'>
             <header className="header">
-                <h1>Werknemers</h1>
-                <button className="toevoegen-knop">Werknemer toevoegen</button>
+                <h1 className='werknemers-header'>Werknemers</h1>
+                <button className="toevoegen-knop">
+                    <FontAwesomeIcon className='icon-plus' icon={faPlus} />
+                    Werknemer toevoegen
+                </button>
             </header>
             {Object.entries(gegroepeerdeWerknemers).map(([groepNaam, groepWerknemers], index) => (
                 <WerknemerGroep
