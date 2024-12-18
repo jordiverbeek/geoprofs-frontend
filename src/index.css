@@ -25,8 +25,6 @@ body { background-color: #D9D9D9; font-family: 'Ubuntu', sans-serif; }
 .vlx-sidebar a { display: flex; font-size: 28px; padding-left: 10px; margin: 0px 18px 0px 18px; border-radius: 16px; border: solid 1px lightblue; text-decoration: none; background-color: #0984F5; color: white; align-items: center; transition: 0.3s; cursor: pointer; }
 .vlx-sidebar a:hover { background-color: white; border: solid 1px #0984F5; color: #0984F5; }
 .vlx-sidebar .icons { margin: 10px; width: 22px; }
-.vlx-sidebar .icons-dropdown { margin-left: auto; margin-right: 10px; width: 22px; display: inline-flex; align-items: center; justify-content: center; transition: transform 0.3s ease-in-out; transform-origin: center; }
-.vlx-sidebar .icons-dropdown.active { transform: rotate(180deg); transform-origin: center; margin-right: 10px; }
 
 
 
