@@ -15,6 +15,8 @@ const Sidebar = () => {
     const [selectedReason, setSelectedReason] = useState('');
     const [selectedButton, setSelectedButton] = useState(null);
     const [customReason, setCustomReason] = useState('');
+    const date = new Date();
+
 
 
     const handleClick = (button) => {
@@ -83,6 +85,7 @@ const Sidebar = () => {
                                 selected={selectedDate}
                                 onChange={(date) => setSelectedDate(date)}
                                 dateFormat="dd/MM/yyyy"
+                                minDate={date}
                                 placeholderText="Selecteer een datum"
                                 locale={enGB}
                             />
