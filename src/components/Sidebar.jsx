@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarDays, faUserGroup, faGear } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDays, faUserGroup, faSignOut } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import enGB from 'date-fns/locale/en-GB';
-import { faCalendarDays, faUserGroup, faSignOut } from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie';
 
 
@@ -19,6 +18,10 @@ const Sidebar = () => {
     const date = new Date();
 
 
+    const handleClick = (button) => {
+        setSelectedButton(button);
+    };    
+    
     const handleLogout = () => {
         Cookies.remove('bearer_token', { path: '' }) 
         if (Cookies.get('bearer_token') === undefined) {
