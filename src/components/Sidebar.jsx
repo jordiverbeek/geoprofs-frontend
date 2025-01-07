@@ -6,7 +6,6 @@ import Cookies from 'js-cookie';
 
 
 const Sidebar = () => {
-    const [active, setActive] = useState('');
     const navigate = useNavigate();
     const [isModalOpen, setModalOpen] = useState(false);
 
@@ -15,15 +14,6 @@ const Sidebar = () => {
         if (Cookies.get('bearer_token') === undefined) {
             console.log('Cookie removed');
             console.log('logging out');
-        }
-    };
-
-    const handleActive = (buttonName) => {
-        if (active === buttonName) {
-            setActive('');
-            return;
-        } else {
-            setActive(buttonName);
         }
     };
 
@@ -37,19 +27,19 @@ const Sidebar = () => {
                 <div className='container'>
                     <div className='container-top'>
                         <h1 onClick={() => navigate('/')}>Verlof Systeem</h1>
-                        <Link to={'/'} onClick={() => handleActive('dashboard')}>
+                        <Link to={'/'}>
                             <FontAwesomeIcon className='icons' icon={faCalendarDays} />
                             Dashboard
                         </Link>
-                        <Link to={'/werknemers'} onClick={() => handleActive('werknemers')}>
+                        <Link to={'/werknemers'} >
                             <FontAwesomeIcon className='icons' icon={faUserGroup} />
                             Werknemers
                         </Link>
-                        <Link to={'/planning'} onClick={() => handleActive('planning')}>
+                        <Link to={'/planning'}>
                             <FontAwesomeIcon className='icons' icon={faCalendarDays} />
                             Planning
                         </Link>
-                        <Link onClick={() => { handleActive('verlof'); toggleModal(); }}>
+                        <Link onClick={() => { toggleModal(); }}>
                             <FontAwesomeIcon className='icons' icon={faCalendarDays} />
                             Verlof aanvragen
                         </Link>
