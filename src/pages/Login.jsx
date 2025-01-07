@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie';
 import axios from 'axios'
+
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -8,38 +10,47 @@ const Login = () => {
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const sendForm = () => {
         if (password.length < 8) {
-            setError('Password must be at least 8 characters long')
+            setError('Password must be at least 8 characters long');
             return;
+
         } else {
             const data = {
                 email: email,
-                password: password  
+                password: password
             }
-            axios.post('https://geoprofs-backend.test/api/auth/login', data, {
+            setLoading(true);
+            axios.post('https://geoprofs-backend.vacso.cloud/api/auth/login', data, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
                 }
-
             })
                 .then(response => {
-                    console.log(response.data.access_token);
-                    localStorage.setItem('token', response.data.access_token);
+                    setLoading(false);
+                    
+                    Cookies.set('bearer_token', response.data.access_token, {
+                        expires: 1
+                    }); 
+                    
+                    console.log('Cookie set:', Cookies.get('bearer_token'));
                     navigate('/');
                 })
+
                 .catch(error => {
+                    if (error.response) {
+                        setError(error.response.data.message || 'Login failed');
+                    } else if (error.request) {
+                        setError('No response from the server. Please try again later.');
+                    } else {
+                        setError('An unexpected error occurred.');
+                    }
                     console.error('Error:', error);
                 });
-
         }
-    }
-
-    useEffect(() => {
-        setError('');
-    }, [])
+    };
 
     return (
         <section data-testid='test-login' className='vlx-login vlx-auth-page'>
