@@ -24,25 +24,33 @@ const WerknemerKaart = ({ naam, email }) => (
     </div>
 );
 
-const WerknemerGroep = ({ groepNaam, werknemers }) => (
+const WerknemerGroep = ({ groepNaam, werknemers, isCollapsed, onToggle }) => (
     <div className="werknemer-groep">
-        <div className="groep-naam">
+        <div className="groep-naam" onClick={onToggle}>
             <h3>{groepNaam}</h3>
             <hr />
         </div>
-        <div className="werknemer-lijst">
-            {werknemers.map((werknemer, index) => (
-                <WerknemerKaart key={index} naam={werknemer.naam} email={werknemer.email} />
-            ))}
-        </div>
+        {!isCollapsed && (
+            <div className="werknemer-lijst">
+                {werknemers.map((werknemer, index) => (
+                    <WerknemerKaart key={index} naam={werknemer.naam} email={werknemer.email} />
+                ))}
+            </div>
+        )}
     </div>
 );
 
 const Werknemers = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [collapsedGroups, setCollapsedGroups] = useState({});
 
     const handleModalOpen = () => setIsModalOpen(true);
     const handleModalClose = () => setIsModalOpen(false);
+
+    const werknemers = [
+        { naam: 'John Doe', email: 'john.doe@example.com', groep: 'Geo-ICT ontwikkeling' },
+        { naam: 'Jane Smith', email: 'jane.smith@example.com', groep: 'Geo-ICT scanning' },
+    ];
 
     const gegroepeerdeWerknemers = werknemers.reduce((groepen, werknemer) => {
         if (!groepen[werknemer.groep]) {
@@ -51,6 +59,13 @@ const Werknemers = () => {
         groepen[werknemer.groep].push(werknemer);
         return groepen;
     }, {});
+
+    const toggleGroup = (groepNaam) => {
+        setCollapsedGroups((prev) => ({
+            ...prev,
+            [groepNaam]: !prev[groepNaam],
+        }));
+    };
 
     const [formData, setFormData] = useState({
         firstname: '',
@@ -83,17 +98,14 @@ const Werknemers = () => {
         setSuccessMessage('');
 
         try {
-            const response = await axios.post(
-                'https://geoprofs-backend.vacso.cloud/api/users/create',
-                formData,
-                {
-                    headers: {
-                        Authorization: "Bearer ",
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                    },
-                }
-            );
+            const response = await axios.post('https://geoprofs-backend.vacso.cloud/api/users/create', formData, {
+                headers: {
+                    Authorization: "Bearer " + Cookies.get("bearer_token"),
+                    "Content-Type": "application/json",
+                    'Access-Control-Allow-Origin': '*',
+                    Accept: "application/json",
+                },
+            });
 
             if (response.status === 200) {
                 setSuccessMessage('Registration successful!');
@@ -101,16 +113,16 @@ const Werknemers = () => {
 
                 // Clear form after successful submission
                 setFormData({
-                    firstname: '',
-                    lastname: '',
+                    first_name: '',
+                    sure_name: '',
                     email: '',
                     password: '',
                     bsn: '',
                     date_of_service: '',
                     sick_days: '',
-                    vacation_days: '',
+                    vac_days: '',
                     personal_days: '',
-                    max_vacation_days: ''
+                    max_vac_days: ''
                 });
             } else {
                 setErrorMessage(response.data.message || 'Registration failed.');
@@ -132,7 +144,13 @@ const Werknemers = () => {
             </header>
 
             {Object.entries(gegroepeerdeWerknemers).map(([groepNaam, groepWerknemers], index) => (
-                <WerknemerGroep key={index} groepNaam={groepNaam} werknemers={groepWerknemers} />
+                <WerknemerGroep
+                    key={index}
+                    groepNaam={groepNaam}
+                    werknemers={groepWerknemers}
+                    isCollapsed={collapsedGroups[groepNaam]}
+                    onToggle={() => toggleGroup(groepNaam)}
+                />
             ))}
 
             {/* Modal voor Register Formulier */}
