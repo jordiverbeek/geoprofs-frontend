@@ -28,7 +28,7 @@ const WerknemerGroep = ({ groepNaam, werknemers, isCollapsed, onToggle }) => (
     <div className="werknemer-groep">
         <div className="groep-naam" onClick={onToggle}>
             <h3>{groepNaam}</h3>
-            <hr />
+            {!isCollapsed && <hr />}
         </div>
         {!isCollapsed && (
             <div className="werknemer-lijst">
