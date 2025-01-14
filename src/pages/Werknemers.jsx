@@ -4,12 +4,6 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
-const headers = {
-    // "Authorization": "Bearer " + Cookies.get("bearer_token"),
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
 const WerknemerKaart = ({ naam, email }) => (
     <div className="werknemer-kaart">
         <img
@@ -70,6 +64,7 @@ const Werknemers = () => {
     const [formData, setFormData] = useState({
         firstname: '',
         lastname: '',
+        role_slug: 'medewerker',
         email: '',
         password: '',
         bsn: '',
@@ -101,10 +96,10 @@ const Werknemers = () => {
             const response = await axios.post('https://geoprofs-backend.vacso.cloud/api/users/create', formData, {
                 headers: {
                     Authorization: "Bearer " + Cookies.get("bearer_token"),
-                    "Content-Type": "application/json",
-                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
                     Accept: "application/json",
                 },
+            
             });
 
             if (response.status === 200) {
@@ -115,6 +110,7 @@ const Werknemers = () => {
                 setFormData({
                     first_name: '',
                     sure_name: '',
+                    role_slug: 'medewerker',
                     email: '',
                     password: '',
                     bsn: '',
