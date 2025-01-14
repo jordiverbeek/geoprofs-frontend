@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Sidebar from './components/Sidebar';
 import Register from "./pages/Register";
+import Planning from "./pages/Planning";
 
 function App() {
     const [showSidebar, setShowSidebar] = useState(true);
@@ -46,6 +47,8 @@ function AppContent({ showSidebar, setShowSidebar, isloggedin }) {
 
                     {/* Pages */}
                     <Route path="/" element={<Home />} />
+                    <Route path="/planning" element={<Planning />} />
+                    
 
 
                     {/* Authentication */}
