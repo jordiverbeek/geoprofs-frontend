@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { faLessThan, faGreaterThan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import Cookies from 'js-cookie'; // Assuming js-cookie is installed
 
 // Helper function to calculate the week number
 const getWeekNumber = (date) => {
@@ -9,14 +11,37 @@ const getWeekNumber = (date) => {
     const pastDaysOfYear = (date - firstDayOfYear + (24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000);
     return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
 };
+
 const Planning = () => {
     const [weeknumber, setWeeknumber] = useState(1);
     const [dropdownVisible, setDropdownVisible] = useState(false);
-    const [selectedButton, setSelectedButton] = useState(''); // Store the selected button as a string ('ma-vr' or 'ma-zo')
+    const [selectedButton, setSelectedButton] = useState('ma-vr');
+    const [users, setUsers] = useState([]); // State to hold users data
+    const [loading, setLoading] = useState(true); // Added loading state
 
     useEffect(() => {
         const currentWeek = getWeekNumber(new Date());
         setWeeknumber(currentWeek);
+
+        // Fetch users from the API with authorization headers
+        axios.get('https://geoprofs-backend.vacso.cloud/api/users', {
+            headers: {
+                Authorization: "Bearer " + Cookies.get("bearer_token"),
+                'Content-Type': 'application/json',
+                Accept: "application/json",
+                "Access-Control-Allow-Origin": "*"
+            }
+        })
+        .then(response => {
+            setUsers(response.data.users); // Extracting the 'users' array
+            console.log('Users fetched:', response.data.users);
+            setLoading(false);
+        })
+        .catch(error => {
+            console.error('Error fetching users:', error);
+            setLoading(false);
+        });
+        
     }, []);
 
     const changeWeekNumber = (week) => {
@@ -40,13 +65,23 @@ const Planning = () => {
     };
 
     const handleActive = (buttonName) => {
-        // Toggles the button state
-        if (selectedButton === buttonName) {
-            setSelectedButton(''); // Deselect if it's already active
-        } else {
-            setSelectedButton(buttonName);
-        }
-    }
+        setSelectedButton(buttonName);
+    };
+
+    const renderDays = () => {
+        const days = selectedButton === 'ma-vr' ? ['Ma', 'Di', 'Wo', 'Do', 'Vr'] : ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'];
+        return days.map(day => <div key={day} className="day-column">{day}</div>);
+    };
+
+    const renderUsers = () => {
+        return users.map(user => (
+            <div key={user.id} className="user-row">
+                <div className="user-name">{user.first_name + " " + user.sure_name}</div>
+                <div className="user-email">{ " " + user.email}</div>
+                {/* Add more user details as needed */}
+            </div>
+        ));
+    };
 
     return (
         <div className='container-planning'>
@@ -100,13 +135,15 @@ const Planning = () => {
                     </div>
                 </div>
                 <div className='planning-content'>
-                    <div className='Werknemer-tekst'>Werknemers</div>
+                    <div className='header-row'>
+                        <div className='Werknemer-tekst'>Werknemers</div>
+                        {renderDays()}
+                    </div>
+                    {loading ? <div>Loading...</div> : renderUsers()}
                 </div>
             </div>
         </div>
-
     );
 };
-
 
 export default Planning;

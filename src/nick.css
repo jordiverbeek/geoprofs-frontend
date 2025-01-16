@@ -114,3 +114,10 @@ h1 { font-size: 24px; margin-bottom: 20px; color: #333; }
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
 }
 
+.user-row {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    border: 1px solid black; /* Voeg een border toe voor debugging */
+    background-color: white;
+}
