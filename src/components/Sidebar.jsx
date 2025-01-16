@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarDays, faUserGroup, faGear } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import enGB from 'date-fns/locale/en-GB';
@@ -16,11 +16,12 @@ const Sidebar = () => {
     const [selectedReason, setSelectedReason] = useState('');
     const [selectedButton, setSelectedButton] = useState(null);
     const [customReason, setCustomReason] = useState('');
+    const [error, setError] = useState(null);
     const date = new Date();
 
 
     const handleLogout = () => {
-        Cookies.remove('bearer_token', { path: '' }) 
+        Cookies.remove('bearer_token', { path: '' })
         if (Cookies.get('bearer_token') === undefined) {
             console.log('Cookie removed');
             console.log('logging out');
@@ -46,6 +47,51 @@ const Sidebar = () => {
 
     const handleCustomReasonChange = (e) => {
         setCustomReason(e.target.value);
+    };
+
+    const handleClick = (button) => {
+        setSelectedButton(button);
+    }
+
+    const handleVerlofAanvraag = (formDate, time, reason, customReason) => {
+        setError('');
+
+        if (formDate === '1970-01-01' || formDate === '' || time === '' || reason === '' || reason === 'Overig' && customReason === '') {
+            setError('fill in the entire form');            
+            return;
+        } else {
+            if (time === 'Ochtend') {
+                var reasonMorning = reason;
+            } else if (time === 'Middag') {
+                var reasonAfternoon = reason;
+            } else if (time === 'Hele dag') {
+                var reasonMorning = reason;
+                var reasonAfternoon = reason;
+            }
+            
+            const date = new Date(formDate);
+            const formattedDate = date.toISOString().split('T')[0];
+            
+            console.log(formattedDate, reasonMorning, reasonAfternoon, customReason);
+
+            axios.post('https://geoprofs-backend.vacso.cloud/api/attendance/create', {
+                headers: {
+                    
+                    'Content-Type': 'application/json',
+                },
+                date: date,
+                morning: reasonMorning,
+                afternoon: reasonAfternoon,
+                description: customReason, 
+            },)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+
+        }
     };
 
     return (
@@ -83,6 +129,7 @@ const Sidebar = () => {
                 <div className="modal-overlay" onClick={closeModal}>
                     <div className="modal-content">
                         <h2>Verlof aanvragen</h2>
+                        {<p className="error">{error}</p>}
                         <div className="body">
                             <h3>Datum</h3>
                             <DatePicker
@@ -121,14 +168,12 @@ const Sidebar = () => {
                                 value={selectedReason}
                                 onChange={handleReasonChange}
                             >
-                                <option value="" disabled>
-                                    Kies een reden
-                                </option>
+                                <option value='' disabled> Kies een reden </option>
                                 <option value="Vakantie">Vakantie</option>
                                 <option value="Ziekte">Ziekte</option>
                                 <option value="Persoonlijk">Persoonlijk</option>
-                                <option value="Ziekte">Zwangerschap</option>
-                                <option value="Persoonlijk">Ouderschapsverlof</option>
+                                <option value="Zwangerschap">Zwangerschap</option>
+                                <option value="Ouderschaps">Ouderschaps</option>
                                 <option value="Overig">Overig</option>
                             </select>
 
@@ -149,7 +194,7 @@ const Sidebar = () => {
                         </div>
                         <div className="modal-bottom">
                             <button onClick={toggleModal}>Annuleren</button>
-                            <button onClick={toggleModal}>Bevestigen</button>
+                            <button onClick={() => handleVerlofAanvraag(selectedDate, selectedButton, selectedReason, customReason)}>Bevestigen</button>
                         </div>
                     </div>
                 </div>
