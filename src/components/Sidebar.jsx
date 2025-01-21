@@ -74,10 +74,6 @@ const Sidebar = () => {
         setCustomReason(e.target.value);
     };
 
-    const handleClick = (button) => {
-        setSelectedButton(button);
-    }
-
     const handleVerlofAanvraag = (formDate, time, reason, customReason) => {
         
         setError('');
