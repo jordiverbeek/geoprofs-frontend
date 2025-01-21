@@ -1,38 +1,40 @@
-* { margin: 0px; padding: 0px; box-sizing: border-box; } 
+* { margin: 0px; padding: 0px; box-sizing: border-box; interpolate-size: allow-keywords;} 
 body { background-color: #D9D9D9; font-family: 'Ubuntu', sans-serif; }
 .vlx-main-page { width: 100%; height: 100%; display: grid; grid-template-columns: 360px auto; gap: 30px; padding: 30px; }
 .vlx-main-page:has(.vlx-auth-page) { display: block !important; padding: 0; }
 
 
 
+
+
+/* Main  */
 .vlx-body {  }
-.vlx-body { width: 100%; display: flex; }
+.vlx-body { width: 100%; display: flex; position: relative; }
 
 
 
 
 
-
+/* Sidebar */
 .vlx-sidebar {  }
-.vlx-sidebar { width: 360px; height: calc(100vh - 60px); display: flex; justify-content: center; background-color: #ffffff; box-shadow: 5px 5px 5px 0px rgba(0,0,0,.25); color: #fff; padding: 10px; border-radius: 16px; }
+.vlx-sidebar { width: 360px; height: calc(100vh - 60px); position: sticky; top: 30px; display: flex; justify-content: center; background-color: #ffffff; box-shadow: 5px 5px 5px 0px rgba(0,0,0,.25); color: #fff; padding: 10px; border-radius: 16px; }
 .vlx-sidebar .container { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between;}
 .vlx-sidebar .container-top { width: 100%; height: 50%; display: flex; flex-direction: column; gap: 12px; }
 .vlx-sidebar .container-bot { width: 100%; height: 50%; display: flex; flex-direction: column; justify-content: flex-end; gap: 1rem; margin-bottom: 10px; }
 .vlx-sidebar h1 { color: #000; font-size: 40px; font-weight: 900; text-align: center; margin: 5px 5px;}
-.vlx-sidebar a { display: flex; font-size: 28px; padding-left: 10px; margin: 0px 18px 0px 18px; border-radius: 16px; border: solid 1px lightblue; text-decoration: none; background-color: #0984F5; color: white; align-items: center; }
-.vlx-sidebar a.active { background-color: white; border: solid 1px #0984F5; color: #0984F5; }
-.vlx-sidebar .dropdown { margin-bottom: -12px; opacity: 0; flex-direction: column; gap: 10px; transition: height 0.3s ease-in-out, opacity .3s ; height: 0px; }
-.vlx-sidebar .dropdown.active { display: flex; opacity: 1; height: 80px; margin-bottom: 0px; }
+.vlx-sidebar a { display: flex; font-size: 28px; padding-left: 10px; margin: 0px 18px 0px 18px; border-radius: 16px; border: solid 1px lightblue; text-decoration: none; background-color: #0984F5; color: white; align-items: center; transition: 0.3s; cursor: pointer; }
+.vlx-sidebar a:hover { background-color: white; border: solid 1px #0984F5; color: #0984F5; }
 .vlx-sidebar .icons { margin: 10px; width: 22px; }
-.vlx-sidebar .icons-dropdown { margin-left: auto; margin-right: 10px; width: 22px; display: inline-flex; align-items: center; justify-content: center; transition: transform 0.3s ease-in-out; transform-origin: center; }
-.vlx-sidebar .icons-dropdown.active { transform: rotate(180deg); transform-origin: center; margin-right: 10px; }
 
 
 
+
+
+/* Login */
 .vlx-login {  }
 .vlx-login { width: 100vw; height: 100vh; background-image: url("../images/Login-image.png"); background-size: cover; background-position: center; background-repeat: no-repeat; }
 .vlx-login .container { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
-.vlx-login .card { width: 22%; min-height: 50%; display: flex; flex-direction: column; align-items: center; background-color: white; border-radius: 12px; box-shadow: 5px 5px 5px 0px rgba(0,0,0,.25); padding: 10px; }
+.vlx-login .card { width: 350px; min-height: 50%; display: flex; flex-direction: column; align-items: center; background-color: white; border-radius: 12px; box-shadow: 5px 5px 5px 0px rgba(0,0,0,.25); padding: 10px; }
 .vlx-login .card h1 { color: #000; font-size: 40px; font-weight: 900; text-align: center; margin: 5px 5px;}
 .vlx-login .card .email-container { width: 80%; display: flex; flex-direction: column; gap: 5px; }
 .vlx-login .card .pw-container { width: 80%; display: flex; flex-direction: column; gap: 5px; margin-top: 10px; }
@@ -41,3 +43,59 @@ body { background-color: #D9D9D9; font-family: 'Ubuntu', sans-serif; }
 .vlx-login .card button { width: 60%; height: 40px; border-radius: 8px; border: none; background-color: #0984F5; color: white; font-size: 20px; margin-top: 25px; cursor: pointer; }
 .vlx-login .card button:hover { background-color: #0d6efd; }
 .vlx-login .card a { color: #0984F5; margin-top: 12px;}
+
+
+
+
+
+/* responsive code login */
+@media screen and (max-width: 400px) { .vlx-login {  } .vlx-login .card { width: 100%; min-height: 50%; display: flex; flex-direction: column; align-items: center; background-color: white; box-shadow: 5px 5px 5px 0px rgba(0,0,0,.25); padding: 10px; } }
+
+
+
+
+
+/* Modal for verlof aanvraag */
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; } 
+.modal-overlay.is-open { background-color: rgba(0, 0, 0, 0.5); opacity: 1; visibility: visible; }
+.modal-content { background: white; padding: 40px 100px 20px 100px ; border-radius: 8px; width: 500px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; } 
+.modal-content h2 { text-align: center; margin-bottom: 15px; } 
+.modal-content h3 { text-align: start; } 
+.modal-content button { margin-top: 20px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; } 
+.modal-content button:hover { background-color: #0056b3; } 
+.modal-button a { display: flex; font-size: 28px; padding-left: 10px; margin: 0px 18px 0px 18px; border-radius: 16px; border: solid 1px lightblue; text-decoration: none; background-color: #0984F5; color: white; align-items: center; cursor: pointer; }
+.modal-button:hover { background-color: white; border: solid 1px #0984F5; color: #0984F5; }
+.modal-bottom { display: flex; gap: 5px; margin-top: 20px; align-items: center; justify-content: center; }
+.modal-content .body { display: flex; flex-direction: column; gap: 10px; }
+.modal-content .error { color: red; display: none; justify-content: space-around; height: 20px; }
+.modal-content .success { color: rgb(0, 218, 0); display: none; justify-content: space-around; height: 20px; }
+.modal-content .error:not(:empty), .modal-content .success:not(:empty) { display: flex; }
+.modal-content .body input { width: 100%; height: 40px; border-radius: 8px; border: 1px solid #0984F5; padding-left: 10px; background-color: #fff; }
+
+
+
+
+
+/* Date field for verlof aanvraag form */
+.react-datepicker { font-family: Arial, sans-serif; border: 1px solid #ccc; border-radius: 8px; background-color: white; }
+.react-datepicker__navigation--previous { position: absolute; top: -6px; }  
+.react-datepicker__navigation--next { position: absolute; left: 199px; top: -6px; }
+.react-datepicker__header { background-color: #007bff; color: white !important; border-bottom: none; }
+.react-datepicker__day-name { color: #fff; }   
+.react-datepicker__header h2 { text-align: center; margin-top: 10px; margin-bottom: 12px; font-size: 20px; color: #fff; }
+.react-datepicker__day--selected, .react-datepicker__day--keyboard-selected { background-color: #007bff !important; color: white !important; }
+    
+
+
+
+
+/* Buttons for time */
+.buttons-tijd-container { display: flex; width: 100%; gap: 0; }
+.buttons-tijd-container button { border-radius: 0px; border: 1px solid #0984F5; background-color: white; color: #0984F5; cursor: pointer; transition: background-color 0.3s, color 0.3s; margin: 0; padding: 10px; font-size: 16px; flex-grow: 1; }
+.buttons-tijd-container button:first-child { border-radius: 16px 0 0 16px; }
+.buttons-tijd-container button:last-child { border-radius: 0 16px 16px 0; }
+.buttons-tijd-container button:not(:first-child) { border-left: none; }
+.buttons-tijd-container button.selected { background-color: #0984F5; color: white; }
+.buttons-tijd-container button:hover { background-color: #0984F5; color: white; }
+
+#verlof-reden { width: 100%; padding: 10px; padding-right: 20px; border: 1px solid #0984F5; border-radius: 16px; font-size: 16px; }
