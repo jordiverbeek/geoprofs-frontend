@@ -17,6 +17,7 @@ const Planning = () => {
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [selectedButton, setSelectedButton] = useState('ma-vr');
     const [users, setUsers] = useState([]); // State to hold users data
+    const [agenda, setAgenda] = useState([]); // State to hold agenda data
     const [loading, setLoading] = useState(true); // Added loading state
 
     useEffect(() => {
@@ -41,6 +42,26 @@ const Planning = () => {
             console.error('Error fetching users:', error);
             setLoading(false);
         });
+
+        axios.get('https://geoprofs-backend.vacso.cloud/api/agenda/get', {
+            headers: {
+                Authorization: "Bearer " + Cookies.get("bearer_token"),
+                'Content-Type': 'application/json',
+                Accept: "application/json",
+                "Access-Control-Allow-Origin": "*"
+            }
+        })
+        .then(response => { 
+            console.log('Agenda generated:', response.data);
+            setAgenda(response.data.agenda); // Opslaan in de state
+            setLoading(false); // Stop met laden
+        })
+        .catch(error => {
+            console.error('Error generating agenda:', error);
+            setLoading(false);
+        });
+        
+        
         
     }, []);
 
@@ -70,8 +91,40 @@ const Planning = () => {
 
     const renderDays = () => {
         const days = selectedButton === 'ma-vr' ? ['Ma', 'Di', 'Wo', 'Do', 'Vr'] : ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'];
-        return days.map(day => <div key={day} className="day-column">{day}</div>);
     };
+
+    const renderAgenda = () => {
+        if (!agenda[2025]) return <div>Geen agenda beschikbaar</div>;
+    
+        // Haal de juiste week op (bijv. 2025, weeknumber)
+        const weekData = agenda[2025][weeknumber];
+        if (!weekData) return <div>Geen data voor week {weeknumber}</div>;
+    
+        // Stel de juiste dagenreeks in
+        const selectedDays = selectedButton === 'ma-vr' 
+            ? ['2025-01-06', '2025-01-07', '2025-01-08', '2025-01-09', '2025-01-10'] 
+            : ['2025-01-06', '2025-01-07', '2025-01-08', '2025-01-09', '2025-01-10', '2025-01-11', '2025-01-12'];
+    
+        return selectedDays.map((date) => (
+            <div key={date} className="agenda-row">
+                <div className="date">{date}</div>
+                <div className="tasks">
+                    {weekData[date] && weekData[date].length > 0 ? (
+                        weekData[date].map((task, index) => (
+                            <div key={index} className="task-item">
+                                {task}
+                            </div>
+                        ))
+                    ) : (
+                        <div className="no-tasks">Geen taken</div>
+                    )}
+                </div>
+            </div>
+        ));
+    };
+    
+    
+        
 
     const renderUsers = () => {
         return users.map(user => (
@@ -139,7 +192,8 @@ const Planning = () => {
                         <div className='Werknemer-tekst'>Werknemers</div>
                         {renderDays()}
                     </div>
-                    {loading ? <div>Loading...</div> : renderUsers()}
+                    {loading ? <div>Loading...</div> : renderAgenda()}
+                    {/* {loading ? <div>Loading...</div> : renderUsers()} */}
                 </div>
             </div>
         </div>
