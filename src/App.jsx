@@ -1,26 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Sidebar from './components/Sidebar';
 import Register from "./pages/Register";
-
-function App() {
-    const [showSidebar, setShowSidebar] = useState(true);
-    const [isloggedin, setIsloggedin] = useState(false);
-
-    return (
-        <section className='vlx-main-page'>
-            <BrowserRouter>
-                <AppContent
-                    showSidebar={showSidebar}
-                    setShowSidebar={setShowSidebar}
-                    isloggedin={isloggedin}
-                />
-            </BrowserRouter>
-        </section>
-    );
-}
 
 function AppContent({ showSidebar, setShowSidebar, isloggedin }) {
     const location = useLocation();
@@ -39,24 +23,49 @@ function AppContent({ showSidebar, setShowSidebar, isloggedin }) {
     return (
         <>
             {showSidebar && <Sidebar />}
-
             <section className='vlx-body'>
                 <Routes>
-                    {isloggedin ? '' : <Route path="/auth/login" element={<Login />} />}
-
-                    {/* Pages */}
-                    <Route path="/" element={<Home />} />
-
-
-                    {/* Authentication */}
+                    <Route path="/" element={isloggedin ? <Home /> : <Login />} />
                     <Route path="/auth/login" element={<Login />} />
                     <Route path="/auth/register" element={<Register />} />
-
-
                 </Routes>
             </section>
         </>
     );
 }
 
-export default App;
+function App() {
+    const [showSidebar, setShowSidebar] = useState(true);
+    const [isloggedin, setIsloggedin] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = Cookies.get('bearer_token');
+        if (!token) {
+            setIsloggedin(false);
+            navigate('/auth/login');
+        } else {
+            setIsloggedin(true);
+        }
+    }, [navigate]);
+
+    return (
+        <section className='vlx-main-page'>
+            <AppContent
+                showSidebar={showSidebar}
+                setShowSidebar={setShowSidebar}
+                isloggedin={isloggedin}
+            />
+        </section>
+    );
+}
+
+function Root() {
+    return (
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    );
+}
+
+export default Root;
