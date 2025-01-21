@@ -24,8 +24,8 @@ const Sidebar = () => {
 
     const handleClick = (button) => {
         setSelectedButton(button);
-    };    
-    
+    };
+
     const handleLogout = () => {
         Cookies.remove('bearer_token', { path: '' })
         if (Cookies.get('bearer_token') === undefined) {
@@ -75,7 +75,7 @@ const Sidebar = () => {
     };
 
     const handleVerlofAanvraag = (formDate, time, reason, customReason) => {
-        
+
         setError('');
         const date = new Date(formDate);
         const formattedDate = date.toISOString().split('T')[0];
@@ -92,8 +92,8 @@ const Sidebar = () => {
                 var reasonMorning = reason;
                 var reasonAfternoon = reason;
             }
-            
-    
+
+
             console.log(formattedDate, reasonMorning, reasonAfternoon, customReason);
 
             console.log(Cookies.get("bearer_token"))
@@ -113,17 +113,17 @@ const Sidebar = () => {
                     },
                 }
             )
-            .then(response => {
-                setMessage('Verlof aanvraag is gelukt!')
-                console.log(response.data);
+                .then(response => {
+                    setMessage('Verlof aanvraag is gelukt!')
+                    console.log(response.data);
 
-                setFormSubmitted(true);
-            })
-            .catch(error => {
-                console.error(error.response ? error.response.data : error.message);
-            });
-            
-            
+                    setFormSubmitted(true);
+                })
+                .catch(error => {
+                    console.error(error.response ? error.response.data : error.message);
+                });
+
+
 
         }
     };
@@ -146,13 +146,13 @@ const Sidebar = () => {
                             <FontAwesomeIcon className='icons' icon={faCalendarDays} />
                             Planning
                         </Link>
-                        <Link onClick={() => { toggleModal(); }}>
+                        <Link id='verlof-aanvraag-button' onClick={() => { toggleModal(); }}>
                             <FontAwesomeIcon className='icons' icon={faCalendarDays} />
                             Verlof aanvragen
                         </Link>
                     </div>
                     <div className='container-bot'>
-                        <Link onClick={() => handleLogout()}>
+                        <Link to={"auth/login"} onClick={() => handleLogout()}>
                             <FontAwesomeIcon className='icons' icon={faSignOut} />
                             Logout
                         </Link>
@@ -171,6 +171,7 @@ const Sidebar = () => {
                         <div className="body">
                             <h3>Datum</h3>
                             <DatePicker
+                                id="date-picker"
                                 selected={selectedDate}
                                 onChange={(date) => setSelectedDate(date)}
                                 dateFormat="dd/MM/yyyy"
@@ -184,16 +185,19 @@ const Sidebar = () => {
                                 <button
                                     className={selectedButton === 'Ochtend' ? 'selected' : ''}
                                     onClick={() => handleClick('Ochtend')}
+                                    id="ochtend"
                                 >
                                     Ochtend
                                 </button>
                                 <button
                                     className={selectedButton === 'Middag' ? 'selected' : ''}
                                     onClick={() => handleClick('Middag')}
+                                    id="middag"
                                 >
                                     Middag
                                 </button>
                                 <button
+                                    id="hele-dag"
                                     className={selectedButton === 'Hele dag' ? 'selected' : ''}
                                     onClick={() => handleClick('Hele dag')}
                                 >
@@ -232,7 +236,7 @@ const Sidebar = () => {
                         </div>
                         <div className="modal-bottom">
                             <button onClick={toggleModal}>Annuleren</button>
-                            <button onClick={() => handleVerlofAanvraag(selectedDate, selectedButton, selectedReason, customReason)}>Bevestigen</button>
+                            <button id='submit' onClick={() => handleVerlofAanvraag(selectedDate, selectedButton, selectedReason, customReason)}>Bevestigen</button>
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-describe('example to-do app', () => {
+describe('Login test', () => {
   it('displays the login page', () => {
     cy.visit('http://localhost:5173/auth/login');
 
@@ -8,3 +8,4 @@ describe('example to-do app', () => {
   })
 
 })
+
