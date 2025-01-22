@@ -7,22 +7,30 @@ import Cookies from 'js-cookie';
 
 // Helper functions
 const getWeekNumber = (date) => {
-    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-    const pastDaysOfYear = (date - firstDayOfYear + (24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000);
-    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+    const target = new Date(date.valueOf());
+    const dayNr = (date.getDay() + 6) % 7; // Zorg dat zondag 6 wordt
+    target.setDate(target.getDate() - dayNr + 3); // Zet op donderdag in huidige week
+    const firstThursday = new Date(target.getFullYear(), 0, 4); // De eerste donderdag van het jaar
+    const diff = target - firstThursday;
+    return 1 + Math.round(diff / (7 * 24 * 60 * 60 * 1000));
 };
 
 const getDatesInWeek = (year, week, includeWeekend = false) => {
-    const firstDayOfYear = new Date(year, 0, 1);
-    const daysOffset = (week - 1) * 7 - firstDayOfYear.getDay();
-    const startOfWeek = new Date(year, 0, daysOffset + 1);
-    const days = Array.from({ length: includeWeekend ? 7 : 5 }, (_, i) => {
-        const date = new Date(startOfWeek);
-        date.setDate(startOfWeek.getDate() + i);
+    const simple = new Date(year, 0, 1 + (week - 1) * 7);
+    const dayOfWeek = simple.getDay();
+    const ISOWeekStart = simple;
+    if (dayOfWeek <= 4) {
+        ISOWeekStart.setDate(simple.getDate() - simple.getDay() + 2); // Maandag van huidige week
+    } else {
+        ISOWeekStart.setDate(simple.getDate() + 8 - simple.getDay());
+    }
+    return Array.from({ length: includeWeekend ? 7 : 5 }, (_, i) => {
+        const date = new Date(ISOWeekStart);
+        date.setDate(ISOWeekStart.getDate() + i);
         return date.toISOString().split('T')[0];
     });
-    return days;
 };
+
 
 const Planning = () => {
     const [weeknumber, setWeeknumber] = useState(getWeekNumber(new Date()));
@@ -30,7 +38,7 @@ const Planning = () => {
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [yearDropdownVisible, setYearDropdownVisible] = useState(false);
     const [selectedButton, setSelectedButton] = useState('ma-vr');
-    const [agenda, setAgenda] = useState({}); // Agenda data grouped by year and week
+    const [agenda, setAgenda] = useState({});
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -42,12 +50,14 @@ const Planning = () => {
                         headers: {
                             Authorization: `Bearer ${Cookies.get('bearer_token')}`,
                             'Content-Type': 'application/json',
+                            "Accept": "application/json",
                         },
                     }),
                     axios.get('https://geoprofs-backend.vacso.cloud/api/agenda/get', {
                         headers: {
                             Authorization: `Bearer ${Cookies.get('bearer_token')}`,
                             'Content-Type': 'application/json',
+                            "Accept": "application/json",
                         },
                     }),
                 ]);
@@ -87,28 +97,39 @@ const Planning = () => {
     };
 
     const renderAgenda = () => {
-        if (!agenda[selectedYear]) return <div>Geen agenda beschikbaar voor {selectedYear}</div>;
-        const weekData = agenda[selectedYear][weeknumber];
-        if (!weekData) return <div>Geen data voor week {weeknumber} in {selectedYear}</div>;
+        if (!agenda[selectedYear]) {
+            return <div>Geen agenda beschikbaar voor {selectedYear}</div>;
+        }
 
+        const weekData = agenda[selectedYear][weeknumber];
+        if (!weekData) {
+            return <div>Geen data voor week {weeknumber} in {selectedYear}</div>;
+        }
+        
+        console.log('Weekdata:', weekData);
+        
         const dates = getDatesInWeek(selectedYear, weeknumber, selectedButton === 'ma-zo');
-        return dates.map((date) => (
-            <div key={date} className="agenda-row">
-                <div className="date">{date}</div>
-                <div className="tasks">
-                    {weekData[date] && weekData[date].length > 0 ? (
-                        weekData[date].map((task, index) => (
-                            <div key={index} className="task-item">
-                                {JSON.stringify(task)}
+        return dates.map((date) => {
+            var dateData = weekData[date];
+            return (
+                <div key={date} className="agenda-row">
+                    <div className="date">{date}</div>
+                    <div className="tasks">
+                        {console.log('Date data:', dateData)}
+                        {dateData?.map((user) => (
+                            <div key={user.id} className="task">
+                                <div className="task-user">{user.morning}</div>
+                                <div className="task-time">{user.afternoon}</div>
                             </div>
-                        ))
-                    ) : (
-                        <div className="no-tasks">Geen data beschikbaar</div>
-                    )}
+                        ))}
+                    </div>
                 </div>
-            </div>
-        ));
+            );
+        });
     };
+
+
+
 
     return (
         <div className='container-planning'>
@@ -164,13 +185,13 @@ const Planning = () => {
                         <FontAwesomeIcon icon={faGreaterThan} />
                     </button>
                     <hr className='plan-Spacing' />
-                    <div 
+                    <div
                         className={selectedButton === 'ma-vr' ? 'planning-nav-days active' : 'planning-nav-days'}
                         onClick={() => handleActive('ma-vr')}
                     >
                         Ma - Vr
                     </div>
-                    <div 
+                    <div
                         className={selectedButton === 'ma-zo' ? 'planning-nav-days active' : 'planning-nav-days'}
                         onClick={() => handleActive('ma-zo')}
                     >
