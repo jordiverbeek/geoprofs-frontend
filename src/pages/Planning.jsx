@@ -3,76 +3,74 @@ import { faLessThan, faGreaterThan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import Cookies from 'js-cookie'; // Assuming js-cookie is installed
+import Cookies from 'js-cookie';
 
-// Helper function to calculate the week number
+// Helper functions
 const getWeekNumber = (date) => {
     const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
     const pastDaysOfYear = (date - firstDayOfYear + (24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000);
     return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
 };
 
+const getDatesInWeek = (year, week, includeWeekend = false) => {
+    const firstDayOfYear = new Date(year, 0, 1);
+    const daysOffset = (week - 1) * 7 - firstDayOfYear.getDay();
+    const startOfWeek = new Date(year, 0, daysOffset + 1);
+    const days = Array.from({ length: includeWeekend ? 7 : 5 }, (_, i) => {
+        const date = new Date(startOfWeek);
+        date.setDate(startOfWeek.getDate() + i);
+        return date.toISOString().split('T')[0];
+    });
+    return days;
+};
+
 const Planning = () => {
-    const [weeknumber, setWeeknumber] = useState(1);
+    const [weeknumber, setWeeknumber] = useState(getWeekNumber(new Date()));
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [dropdownVisible, setDropdownVisible] = useState(false);
+    const [yearDropdownVisible, setYearDropdownVisible] = useState(false);
     const [selectedButton, setSelectedButton] = useState('ma-vr');
-    const [users, setUsers] = useState([]); // State to hold users data
-    const [agenda, setAgenda] = useState([]); // State to hold agenda data
-    const [loading, setLoading] = useState(true); // Added loading state
+    const [agenda, setAgenda] = useState({}); // Agenda data grouped by year and week
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const currentWeek = getWeekNumber(new Date());
-        setWeeknumber(currentWeek);
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const [usersResponse, agendaResponse] = await Promise.all([
+                    axios.get('https://geoprofs-backend.vacso.cloud/api/users', {
+                        headers: {
+                            Authorization: `Bearer ${Cookies.get('bearer_token')}`,
+                            'Content-Type': 'application/json',
+                        },
+                    }),
+                    axios.get('https://geoprofs-backend.vacso.cloud/api/agenda/get', {
+                        headers: {
+                            Authorization: `Bearer ${Cookies.get('bearer_token')}`,
+                            'Content-Type': 'application/json',
+                        },
+                    }),
+                ]);
 
-        // Fetch users from the API with authorization headers
-        axios.get('https://geoprofs-backend.vacso.cloud/api/users', {
-            headers: {
-                Authorization: "Bearer " + Cookies.get("bearer_token"),
-                'Content-Type': 'application/json',
-                Accept: "application/json",
-                "Access-Control-Allow-Origin": "*"
-            }
-        })
-        .then(response => {
-            setUsers(response.data.users); // Extracting the 'users' array
-            console.log('Users fetched:', response.data.users);
-            setLoading(false);
-        })
-        .catch(error => {
-            console.error('Error fetching users:', error);
-            setLoading(false);
-        });
+                console.log('Users fetched:', usersResponse.data.users);
+                console.log('Agenda fetched:', agendaResponse.data.agenda);
 
-        axios.get('https://geoprofs-backend.vacso.cloud/api/agenda/get', {
-            headers: {
-                Authorization: "Bearer " + Cookies.get("bearer_token"),
-                'Content-Type': 'application/json',
-                Accept: "application/json",
-                "Access-Control-Allow-Origin": "*"
+                setAgenda(agendaResponse.data.agenda);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            } finally {
+                setLoading(false);
             }
-        })
-        .then(response => { 
-            console.log('Agenda generated:', response.data);
-            setAgenda(response.data.agenda); // Opslaan in de state
-            setLoading(false); // Stop met laden
-        })
-        .catch(error => {
-            console.error('Error generating agenda:', error);
-            setLoading(false);
-        });
-        
-        
-        
+        };
+
+        fetchData();
     }, []);
 
-    const changeWeekNumber = (week) => {
-        setWeeknumber((prevWeek) => {
-            if (week === 'previous' && prevWeek > 1) {
-                return prevWeek - 1;
-            } else if (week === 'next' && prevWeek < 52) {
-                return prevWeek + 1;
-            }
-            return prevWeek;
+    const changeWeekNumber = (direction) => {
+        setWeeknumber((prev) => {
+            if (direction === 'previous') return prev > 1 ? prev - 1 : 52;
+            if (direction === 'next') return prev < 52 ? prev + 1 : 1;
+            return prev;
         });
     };
 
@@ -80,58 +78,34 @@ const Planning = () => {
         setDropdownVisible(!dropdownVisible);
     };
 
-    const selectWeek = (week) => {
-        setWeeknumber(week);
-        setDropdownVisible(false);
+    const toggleYearDropdown = () => {
+        setYearDropdownVisible(!yearDropdownVisible);
     };
 
     const handleActive = (buttonName) => {
         setSelectedButton(buttonName);
     };
 
-    const renderDays = () => {
-        const days = selectedButton === 'ma-vr' ? ['Ma', 'Di', 'Wo', 'Do', 'Vr'] : ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'];
-    };
-
     const renderAgenda = () => {
-        if (!agenda[2025]) return <div>Geen agenda beschikbaar</div>;
-    
-        // Haal de juiste week op (bijv. 2025, weeknumber)
-        const weekData = agenda[2025][weeknumber];
-        if (!weekData) return <div>Geen data voor week {weeknumber}</div>;
-    
-        // Stel de juiste dagenreeks in
-        const selectedDays = selectedButton === 'ma-vr' 
-            ? ['2025-01-06', '2025-01-07', '2025-01-08', '2025-01-09', '2025-01-10'] 
-            : ['2025-01-06', '2025-01-07', '2025-01-08', '2025-01-09', '2025-01-10', '2025-01-11', '2025-01-12'];
-    
-        return selectedDays.map((date) => (
+        if (!agenda[selectedYear]) return <div>Geen agenda beschikbaar voor {selectedYear}</div>;
+        const weekData = agenda[selectedYear][weeknumber];
+        if (!weekData) return <div>Geen data voor week {weeknumber} in {selectedYear}</div>;
+
+        const dates = getDatesInWeek(selectedYear, weeknumber, selectedButton === 'ma-zo');
+        return dates.map((date) => (
             <div key={date} className="agenda-row">
                 <div className="date">{date}</div>
                 <div className="tasks">
                     {weekData[date] && weekData[date].length > 0 ? (
                         weekData[date].map((task, index) => (
                             <div key={index} className="task-item">
-                                {task}
+                                {JSON.stringify(task)}
                             </div>
                         ))
                     ) : (
-                        <div className="no-tasks">Geen taken</div>
+                        <div className="no-tasks">Geen data beschikbaar</div>
                     )}
                 </div>
-            </div>
-        ));
-    };
-    
-    
-        
-
-    const renderUsers = () => {
-        return users.map(user => (
-            <div key={user.id} className="user-row">
-                <div className="user-name">{user.first_name + " " + user.sure_name}</div>
-                <div className="user-email">{ " " + user.email}</div>
-                {/* Add more user details as needed */}
             </div>
         ));
     };
@@ -150,21 +124,37 @@ const Planning = () => {
                         Week {weeknumber} <FontAwesomeIcon icon={faChevronDown} />
                         {dropdownVisible && (
                             <div className='dropdown-menu'>
-                                {Array.from({ length: 52 }, (_, i) => i + 1).map((week) => (
-                                    <div
-                                        key={week}
-                                        className='dropdown-item'
-                                        onClick={() => selectWeek(week)}
-                                    >
-                                        Week {week}
-                                    </div>
-                                )).reduce((rows, item, index) => {
+                                {Array.from({ length: 52 }, (_, i) => i + 1).reduce((rows, week, index) => {
                                     if (index % 4 === 0) rows.push([]);
-                                    rows[rows.length - 1].push(item);
+                                    rows[rows.length - 1].push(
+                                        <div
+                                            key={week}
+                                            className='dropdown-item'
+                                            onClick={() => setWeeknumber(week)}
+                                        >
+                                            Week {week}
+                                        </div>
+                                    );
                                     return rows;
                                 }, []).map((row, index) => (
                                     <div key={index} className='dropdown-row'>
                                         {row}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                    <div className='planning-nav-item dropdown-container' onClick={toggleYearDropdown}>
+                        Jaar {selectedYear} <FontAwesomeIcon icon={faChevronDown} />
+                        {yearDropdownVisible && (
+                            <div className='dropdown-menu'>
+                                {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i).map((year) => (
+                                    <div
+                                        key={year}
+                                        className='dropdown-item'
+                                        onClick={() => setSelectedYear(year)}
+                                    >
+                                        {year}
                                     </div>
                                 ))}
                             </div>
@@ -188,12 +178,7 @@ const Planning = () => {
                     </div>
                 </div>
                 <div className='planning-content'>
-                    <div className='header-row'>
-                        <div className='Werknemer-tekst'>Werknemers</div>
-                        {renderDays()}
-                    </div>
                     {loading ? <div>Loading...</div> : renderAgenda()}
-                    {/* {loading ? <div>Loading...</div> : renderUsers()} */}
                 </div>
             </div>
         </div>
