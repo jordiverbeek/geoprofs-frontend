@@ -26,6 +26,8 @@ const Login = () => {
             axios.post('https://geoprofs-backend.vacso.cloud/api/auth/login', data, {
                 headers: {
                     'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                
                 }
             })
                 .then(response => {

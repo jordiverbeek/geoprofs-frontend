@@ -6,6 +6,24 @@ import Login from './pages/Login';
 import Sidebar from './components/Sidebar';
 import Register from "./pages/Register";
 import Manager from "./pages/Manager";
+import Werknemers from "./pages/Werknemers";
+
+function App() {
+    const [showSidebar, setShowSidebar] = useState(true);
+    const [isloggedin, setIsloggedin] = useState(false);
+
+    return (
+        <section className='vlx-main-page'>
+            <BrowserRouter>
+                <AppContent
+                    showSidebar={showSidebar}
+                    setShowSidebar={setShowSidebar}
+                    isloggedin={isloggedin}
+                />
+            </BrowserRouter>
+        </section>
+    );
+}
 
 function AppContent({ showSidebar, setShowSidebar, isloggedin }) {
     const location = useLocation();
@@ -26,10 +44,14 @@ function AppContent({ showSidebar, setShowSidebar, isloggedin }) {
             {showSidebar && <Sidebar />}
             <section className='vlx-body'>
                 <Routes>
+
+
+                    {/* Authentication */}
                     <Route path="/" element={isloggedin ? <Home /> : <Login />} />
                     <Route path="/auth/login" element={<Login />} />
                     <Route path="/auth/register" element={<Register />} />
-                     <Route path="/Manager" element={<Manager/>} />
+                    <Route path="/Manager" element={<Manager/>} />
+                    <Route path="/werknemers" element={<Werknemers />} />
                 </Routes>
             </section>
         </>
