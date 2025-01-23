@@ -64,13 +64,13 @@ const Login = () => {
                     </div>
                     <div className='email-container'>
                         <label>Email</label>
-                        <input type="email" onChange={(e) => setEmail(e.target.value)} />
+                        <input id='email' type="email" aria-label='email' onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className='pw-container'>
                         <label>Password</label>
-                        <input type="password" onChange={(e) => setPassword(e.target.value)} />
+                        <input id='password' type="password" aria-label='password' onChange={(e) => setPassword(e.target.value)} />
                     </div>
-                    <button type="submit" onClick={sendForm}>Login</button>
+                    <button id='login-button' type="submit"  onClick={sendForm}>Login</button>
                     <Link to={""}>
                         Wachtwoord vergeten?
                     </Link>
