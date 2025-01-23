@@ -24,6 +24,7 @@ body { background-color: #D9D9D9; font-family: 'Ubuntu', sans-serif; margin: 0; 
 
 
 .werknemers { padding: 0px 20px 0px 20px; width: 100%; }
+.wernemers-container { display: flex; flex-direction: row; gap: 30px; background-color: white; border-radius: 5px; padding: 10px 20px 20px 20px; }
 .werknemers-header { color: #0984F5; font-size: 40px;}
 .werknemers .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background-color: white; padding: 14px; border-radius: 5px; }
 .werknemers .icon-plus { margin-right: 5px }

@@ -153,7 +153,7 @@ const Sidebar = () => {
                         <div className="modal-bottom">
                             <button onClick={toggleModal}>Annuleren</button>
                             <button onClick={toggleModal}>Bevestigen</button>
-                        </div>
+                            </div>
                     </div>
                 </div>
             )}
