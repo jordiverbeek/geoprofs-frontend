@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Sidebar from './components/Sidebar';
 import Register from "./pages/Register";
+import Manager from "./pages/Manager";
 
 function AppContent({ showSidebar, setShowSidebar, isloggedin }) {
     const location = useLocation();
@@ -28,6 +29,7 @@ function AppContent({ showSidebar, setShowSidebar, isloggedin }) {
                     <Route path="/" element={isloggedin ? <Home /> : <Login />} />
                     <Route path="/auth/login" element={<Login />} />
                     <Route path="/auth/register" element={<Register />} />
+                     <Route path="/Manager" element={<Manager/>} />
                 </Routes>
             </section>
         </>
