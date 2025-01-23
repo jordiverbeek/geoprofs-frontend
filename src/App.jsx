@@ -11,16 +11,25 @@ import Werknemers from "./pages/Werknemers";
 function App() {
     const [showSidebar, setShowSidebar] = useState(true);
     const [isloggedin, setIsloggedin] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = Cookies.get('bearer_token');
+        if (!token) {
+            setIsloggedin(false);
+            navigate('/auth/login');
+        } else {
+            setIsloggedin(true);
+        }
+    }, [navigate]);
 
     return (
         <section className='vlx-main-page'>
-            <BrowserRouter>
-                <AppContent
-                    showSidebar={showSidebar}
-                    setShowSidebar={setShowSidebar}
-                    isloggedin={isloggedin}
-                />
-            </BrowserRouter>
+            <AppContent
+                showSidebar={showSidebar}
+                setShowSidebar={setShowSidebar}
+                isloggedin={isloggedin}
+            />
         </section>
     );
 }
@@ -58,31 +67,6 @@ function AppContent({ showSidebar, setShowSidebar, isloggedin }) {
     );
 }
 
-function App() {
-    const [showSidebar, setShowSidebar] = useState(true);
-    const [isloggedin, setIsloggedin] = useState(false);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const token = Cookies.get('bearer_token');
-        if (!token) {
-            setIsloggedin(false);
-            navigate('/auth/login');
-        } else {
-            setIsloggedin(true);
-        }
-    }, [navigate]);
-
-    return (
-        <section className='vlx-main-page'>
-            <AppContent
-                showSidebar={showSidebar}
-                setShowSidebar={setShowSidebar}
-                isloggedin={isloggedin}
-            />
-        </section>
-    );
-}
 
 function Root() {
     return (
