@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
@@ -7,7 +7,6 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import enGB from 'date-fns/locale/en-GB';
 import Cookies from 'js-cookie';
-
 
 const Sidebar = () => {
     const navigate = useNavigate();
@@ -18,16 +17,21 @@ const Sidebar = () => {
     const [customReason, setCustomReason] = useState('');
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [error, setError] = useState(null);
+    const [Manager, setManager] = useState(false);
     const [message, setMessage] = useState('');
     const date = new Date();
 
+    useEffect(() => {
+        setManager(Cookies.get('role') === 'manager');
+        setManager(true);
+    }, []);
 
     const handleClick = (button) => {
         setSelectedButton(button);
     };
 
     const handleLogout = () => {
-        Cookies.remove('bearer_token', { path: '' })
+        Cookies.remove('bearer_token', { path: '' });
         if (Cookies.get('bearer_token') === undefined) {
             console.log('Cookie removed');
             console.log('logging out');
@@ -75,28 +79,24 @@ const Sidebar = () => {
     };
 
     const handleVerlofAanvraag = (formDate, time, reason, customReason) => {
-
         setError('');
         const date = new Date(formDate);
         const formattedDate = date.toISOString().split('T')[0];
 
-        if (formattedDate === '1970-01-01' || formattedDate === '' || time === '' || reason === '' || reason === '4' && customReason === '') {
+        if (formattedDate === '1970-01-01' || formattedDate === '' || time === '' || reason === '' || (reason === '4' && customReason === '')) {
             setError('fill in the entire form');
             return;
         } else {
+            let reasonMorning = '';
+            let reasonAfternoon = '';
             if (time === 'Ochtend') {
-                var reasonMorning = reason;
+                reasonMorning = reason;
             } else if (time === 'Middag') {
-                var reasonAfternoon = reason;
+                reasonAfternoon = reason;
             } else if (time === 'Hele dag') {
-                var reasonMorning = reason;
-                var reasonAfternoon = reason;
+                reasonMorning = reason;
+                reasonAfternoon = reason;
             }
-
-
-            console.log(formattedDate, reasonMorning, reasonAfternoon, customReason);
-
-            console.log(Cookies.get("bearer_token"))
 
             axios.post(
                 'https://geoprofs-backend.vacso.cloud/api/attendance/create',
@@ -114,17 +114,12 @@ const Sidebar = () => {
                 }
             )
                 .then(response => {
-                    setMessage('Verlof aanvraag is gelukt!')
-                    console.log(response.data);
-
+                    setMessage('Verlof aanvraag is gelukt!');
                     setFormSubmitted(true);
                 })
                 .catch(error => {
                     console.error(error.response ? error.response.data : error.message);
                 });
-
-
-
         }
     };
 
@@ -138,7 +133,7 @@ const Sidebar = () => {
                             <FontAwesomeIcon className='icons' icon={faCalendarDays} />
                             Dashboard
                         </Link>
-                        <Link to={'/werknemers'} >
+                        <Link to={'/werknemers'}>
                             <FontAwesomeIcon className='icons' icon={faUserGroup} />
                             Werknemers
                         </Link>
@@ -146,13 +141,19 @@ const Sidebar = () => {
                             <FontAwesomeIcon className='icons' icon={faCalendarDays} />
                             Planning
                         </Link>
-                        <Link id='verlof-aanvraag-button' onClick={() => { toggleModal(); }}>
+                        <Link id='verlof-aanvraag-button' onClick={toggleModal}>
                             <FontAwesomeIcon className='icons' icon={faCalendarDays} />
                             Verlof aanvragen
                         </Link>
+                        {Manager && (
+                            <Link to={'/manager'}>
+                                <FontAwesomeIcon className='icons' icon={faCalendarDays} />
+                                Manager Dashboard
+                            </Link>
+                        )}
                     </div>
                     <div className='container-bot'>
-                        <Link to={"auth/login"} onClick={() => handleLogout()}>
+                        <Link to={"auth/login"} onClick={handleLogout}>
                             <FontAwesomeIcon className='icons' icon={faSignOut} />
                             Logout
                         </Link>
@@ -163,11 +164,8 @@ const Sidebar = () => {
                 <div className="modal-overlay" onClick={closeModal}>
                     <div className="modal-content">
                         <h2>Verlof aanvragen</h2>
-                        {error !== '' ?
-                            <p className="error">{error}</p> :
-                            <p className='success'>{message}</p>
-
-                        }
+                        {error && <p className="error">{error}</p>}
+                        {message && <p className='success'>{message}</p>}
                         <div className="body">
                             <h3>Datum</h3>
                             <DatePicker
@@ -179,7 +177,6 @@ const Sidebar = () => {
                                 placeholderText="Selecteer een datum"
                                 locale={enGB}
                             />
-
                             <h3>Tijd</h3>
                             <div className="buttons-tijd-container">
                                 <button
@@ -210,7 +207,7 @@ const Sidebar = () => {
                                 value={selectedReason}
                                 onChange={handleReasonChange}
                             >
-                                <option value='' disabled> Kies een reden </option>
+                                <option value='' disabled>Kies een reden</option>
                                 <option value="2">Vakantie</option>
                                 <option value="1">Ziekte</option>
                                 <option value="3">Persoonlijk</option>
@@ -218,8 +215,6 @@ const Sidebar = () => {
                                 <option value="5">Ouderschaps</option>
                                 <option value="4">Overig</option>
                             </select>
-
-                            {/* Show text input when "Overig" is selected */}
                             {selectedReason === '4' && (
                                 <>
                                     <label htmlFor="custom-reason">Specificeer uw reden:</label>
@@ -232,7 +227,6 @@ const Sidebar = () => {
                                     />
                                 </>
                             )}
-
                         </div>
                         <div className="modal-bottom">
                             <button onClick={toggleModal}>Annuleren</button>
