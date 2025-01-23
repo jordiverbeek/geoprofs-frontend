@@ -45,7 +45,6 @@ const getDayAbbreviation = (() => {
     };
 })();
 
-
 const Planning = () => {
     const [weeknumber, setWeeknumber] = useState(getWeekNumber(new Date()));
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
@@ -54,6 +53,8 @@ const Planning = () => {
     const [selectedButton, setSelectedButton] = useState("ma-vr");
     const [agenda, setAgenda] = useState({});
     const [loading, setLoading] = useState(true);
+    const [users, setUsers] = useState([]);
+    const [weekData, setWeekData] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
@@ -87,6 +88,26 @@ const Planning = () => {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        if (Object.keys(agenda).length > 0) {
+            const newWeekData = agenda[selectedYear]?.[weeknumber];
+            if (newWeekData) {
+                const usersSet = new Set(users);
+                Object.entries(newWeekData).forEach(([date, userEntries]) => {
+                    Object.entries(userEntries).forEach(([userId, userDetails]) => {
+                        const fullName = userDetails.user.first_name + " " + userDetails.user.sure_name;
+                        usersSet.add(fullName);
+                    });
+                });
+                const newUsers = Array.from(usersSet);
+                setUsers(newUsers);
+                setWeekData(newWeekData);
+            }
+        }
+    }, [agenda, selectedYear, weeknumber]);
+
+
+
     const changeWeekNumber = (direction) => {
         setWeeknumber((prev) => {
             if (direction === "previous") return prev > 1 ? prev - 1 : 52;
@@ -104,32 +125,28 @@ const Planning = () => {
     };
 
     const renderAgenda = () => {
-        if (!agenda[selectedYear]) {
-            return <div>Geen agenda beschikbaar voor {selectedYear}</div>;
-        }
-
-        const weekData = agenda[selectedYear][weeknumber];
         if (!weekData) {
             return <div>Geen data voor week {weeknumber} in {selectedYear}</div>;
         }
-
+    
         const dates = getDatesInWeek(selectedYear, weeknumber, selectedButton === "ma-zo");
-
+    
+        console.log(weekData);
         return (
             <>
-                <div className={selectedButton === "ma-zo" ? "planning-header-ma-zo" : "planning-header"}>Werknemers</div>
-                <div className="werknemer-container">
-                    {/* {console.log(weekData)}
-                    {Object.keys(weekData[dates[0]]).map((userId) => (
-                        userId.map((user) => (
-                            console.log(user)
-                        ))
-                    ))} */}
+                <div className="user-container">
+                    <div className={selectedButton === "ma-zo" ? "planning-header-ma-zo" : "planning-header"}>Werknemers</div>
+                    {users.map((user) => (
+                        <div key={user} className="task">
+                            {user}
+                        </div>
+                    ))}
                 </div>
+    
                 {dates.map((date) => {
                     const dateData = weekData[date];
                     const dayAbbreviation = getDayAbbreviation(date);
-
+    
                     return (
                         <div key={date} className="planning-container">
                             <div className="planning-header-dates">
@@ -138,48 +155,38 @@ const Planning = () => {
                                 </div>
                             </div>
                             <div className="tasks">
-                                {dateData && Object.keys(dateData).length > 0 ? (
-                                    Object.entries(dateData).map(([userId, task]) =>
-                                        task && (task.morning !== undefined && task.afternoon !== undefined) || task.morning !== 'aanwezig' || task.afternoon !== 'aanwezig' ? (
-                                            <div key={userId} className="task">
-
-                                                {task.morning === task.afternoon ?
-                                                    <div>
-                                                        {task.morning}
-                                                    </div>
-                                                    :
+                                {users.map((user) => {
+                                    const userTask = dateData ? Object.values(dateData).find((task) => task.user.first_name + " " + task.user.sure_name === user) : null;
+    
+                                    return (
+                                        <div key={user} className="task">
+                                            {userTask ? (
+                                                userTask.morning === userTask.afternoon ? (
+                                                    <div className="task-whole-day">{userTask.morning}</div>
+                                                ) : (
                                                     <>
-                                                        {task.morning === 'aanwezig' || task.afternoon === 'aanwezig' ?
+                                                        {userTask.afternoon === 'aanwezig' ? (
                                                             <>
                                                                 <div className="task-user-morning">
-                                                                    {task.morning === 'aanwezig' ? <></> : task.morning}
+                                                                    {userTask.morning === 'aanwezig' ? <></> : userTask.morning}
                                                                 </div>
-                                                                <div className="task-user-afternoon">
-                                                                    {task.afternoon === 'aanwezig' ? "Aanwezig" : task.afternoon}
-                                                                </div>
+                                                                <div className="task-user-afternoon"></div>
                                                             </>
-                                                            :
+                                                        ) : (
                                                             <>
-
-                                                                <div className="task-user-morning">
-                                                                    {task.morning === 0 ? "No task" : task.morning}
-                                                                </div>
-                                                                <div className="task-user-afternoon">
-                                                                    {task.afternoon === 0 ? "No task" : task.afternoon}
-                                                                </div>
+                                                                {userTask.morning === 'aanwezig'}
+                                                                <div className="task-user-morning"></div>
+                                                                <div className="task-user-afternoon">{userTask.afternoon}</div>
                                                             </>
-                                                        }
+                                                        )}
                                                     </>
-                                                }
-                                                </div>
-                                        ) : (
-                                            <p className="planning-fields" key={userId}>
-                                            </p>
-                                        )
-                                    )
-                                ) : (
-                                    <div className="empty-task"></div>
-                                )}
+                                                )
+                                            ) : (
+                                                <p className="planning-fields" key={user}></p>
+                                            )}
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     );
@@ -187,6 +194,7 @@ const Planning = () => {
             </>
         );
     };
+    
 
     return (
         <div className="container-planning">
