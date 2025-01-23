@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie';
@@ -12,7 +12,7 @@ const Werknemers = () => {
     const handleModalOpen = () => setIsModalOpen(true);
     const handleModalClose = () => setIsModalOpen(false);
 
-    try {
+    useEffect(() => {
         axios.get('https://geoprofs-backend.vacso.cloud/api/users', {
             headers: {
                 Authorization: "Bearer " + Cookies.get("bearer_token"),
@@ -23,12 +23,10 @@ const Werknemers = () => {
             setWerknemers(response.data.users);
         }).catch(error => {
             console.error('Error:', error);
-        });
+        })
+    }, []);
 
 
-    } catch (error) {
-        console.error('Error:', error);
-    }
     const [formData, setFormData] = useState({
         firstname: '',
         lastname: '',
@@ -57,10 +55,10 @@ const Werknemers = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-            setErrorMessage('');
-            setSuccessMessage('');
+        setErrorMessage('');
+        setSuccessMessage('');
 
-            console.log('Cookies:', Cookies.get("bearer_token"));
+        console.log('Cookies:', Cookies.get("bearer_token"));
 
         try {
             const response = await axios.post('https://geoprofs-backend.vacso.cloud/api/users/create', formData, {
