@@ -102,6 +102,8 @@ const Werknemers = () => {
             setErrorMessage('');
             setSuccessMessage('');
 
+            console.log('Cookies:', Cookies.get("bearer_token"));
+
             try {
                 const response = await axios.post('https://geoprofs-backend.vacso.cloud/api/users/create', formData, {
                     headers: {
