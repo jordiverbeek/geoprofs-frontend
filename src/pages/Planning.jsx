@@ -99,10 +99,6 @@ const Planning = () => {
         setDropdownVisible(!dropdownVisible);
     };
 
-    const toggleYearDropdown = () => {
-        setYearDropdownVisible(!yearDropdownVisible);
-    };
-
     const handleActive = (buttonName) => {
         setSelectedButton(buttonName);
     };
@@ -121,8 +117,15 @@ const Planning = () => {
 
         return (
             <>
-                <div className="planning-header">Werknemers</div>
-
+                <div className={selectedButton === "ma-zo" ? "planning-header-ma-zo" : "planning-header"}>Werknemers</div>
+                <div className="werknemer-container">
+                    {/* {console.log(weekData)}
+                    {Object.keys(weekData[dates[0]]).map((userId) => (
+                        userId.map((user) => (
+                            console.log(user)
+                        ))
+                    ))} */}
+                </div>
                 {dates.map((date) => {
                     const dateData = weekData[date];
                     const dayAbbreviation = getDayAbbreviation(date);
@@ -137,23 +140,45 @@ const Planning = () => {
                             <div className="tasks">
                                 {dateData && Object.keys(dateData).length > 0 ? (
                                     Object.entries(dateData).map(([userId, task]) =>
-                                        task && task.morning !== undefined && task.afternoon !== undefined ? (
+                                        task && (task.morning !== undefined && task.afternoon !== undefined) || task.morning !== 'aanwezig' || task.afternoon !== 'aanwezig' ? (
                                             <div key={userId} className="task">
-                                                <div className="task-user-morning">
-                                                    {task.morning === 0 ? "No task" : task.morning}
+
+                                                {task.morning === task.afternoon ?
+                                                    <div>
+                                                        {task.morning}
+                                                    </div>
+                                                    :
+                                                    <>
+                                                        {task.morning === 'aanwezig' || task.afternoon === 'aanwezig' ?
+                                                            <>
+                                                                <div className="task-user-morning">
+                                                                    {task.morning === 'aanwezig' ? <></> : task.morning}
+                                                                </div>
+                                                                <div className="task-user-afternoon">
+                                                                    {task.afternoon === 'aanwezig' ? "Aanwezig" : task.afternoon}
+                                                                </div>
+                                                            </>
+                                                            :
+                                                            <>
+
+                                                                <div className="task-user-morning">
+                                                                    {task.morning === 0 ? "No task" : task.morning}
+                                                                </div>
+                                                                <div className="task-user-afternoon">
+                                                                    {task.afternoon === 0 ? "No task" : task.afternoon}
+                                                                </div>
+                                                            </>
+                                                        }
+                                                    </>
+                                                }
                                                 </div>
-                                                <div className="task-user-afternoon">
-                                                    {task.afternoon === 0 ? "No task" : task.afternoon}
-                                                </div>
-                                            </div>
                                         ) : (
                                             <p className="planning-fields" key={userId}>
-                                                No task for user {userId}
                                             </p>
                                         )
                                     )
                                 ) : (
-                                    <p>No tasks available.</p>
+                                    <div className="empty-task"></div>
                                 )}
                             </div>
                         </div>
