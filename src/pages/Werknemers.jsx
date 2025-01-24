@@ -101,7 +101,7 @@ const Werknemers = () => {
         <section className='werknemers' >
             <header className="header">
                 <h1 className='werknemers-header'>Werknemers</h1>
-                <button className="toevoegen-knop" onClick={handleModalOpen}>
+                <button id='Register-user' className="toevoegen-knop" onClick={handleModalOpen}>
                     <FontAwesomeIcon className='icon-plus' icon={faPlus} />
                     <p className='toevoegen-tekst'>
                         Werknemer toevoegen
@@ -137,6 +137,7 @@ const Werknemers = () => {
                             <input
                                 type="text"
                                 name="first_name"
+                                id='first_name'
                                 placeholder="Firstname"
                                 value={formData.first_name}
                                 onChange={handleChange}
@@ -145,6 +146,7 @@ const Werknemers = () => {
                             <input
                                 type="text"
                                 name="sure_name"
+                                id='sure_name'
                                 placeholder="Lastname"
                                 value={formData.sure_name}
                                 onChange={handleChange}
@@ -153,6 +155,7 @@ const Werknemers = () => {
                             <input
                                 type="email"
                                 name="email"
+                                id='email'
                                 placeholder="Email"
                                 value={formData.email}
                                 onChange={handleChange}
@@ -161,6 +164,7 @@ const Werknemers = () => {
                             <input
                                 type="password"
                                 name="password"
+                                id='password'
                                 placeholder="Password"
                                 value={formData.password}
                                 onChange={handleChange}
@@ -169,6 +173,7 @@ const Werknemers = () => {
                             <input
                                 type="text"
                                 name="bsn"
+                                id='bsn'
                                 placeholder="Bsn"
                                 value={formData.bsn}
                                 onChange={handleChange}
@@ -177,6 +182,7 @@ const Werknemers = () => {
                             <input
                                 type="date"
                                 name="date_of_service"
+                                id='date_of_service'
                                 placeholder="Date of service"
                                 value={formData.date_of_service}
                                 onChange={handleChange}
@@ -185,6 +191,7 @@ const Werknemers = () => {
                             <input
                                 type="number"
                                 name="sick_days"
+                                id='sick_days'
                                 placeholder="Sick days"
                                 value={formData.sick_days}
                                 onChange={handleChange}
@@ -193,6 +200,7 @@ const Werknemers = () => {
                             <input
                                 type="number"
                                 name="vac_days"
+                                id='vac_days'
                                 placeholder="Vacation days"
                                 value={formData.vac_days}
                                 onChange={handleChange}
@@ -201,6 +209,7 @@ const Werknemers = () => {
                             <input
                                 type="number"
                                 name="personal_days"
+                                id='personal_days'
                                 placeholder="Personal days"
                                 value={formData.personal_days}
                                 onChange={handleChange}
@@ -209,6 +218,7 @@ const Werknemers = () => {
                             <input
                                 type="number"
                                 name="max_vac_days"
+                                id='max_vac_days'
                                 placeholder="Max vacation days"
                                 value={formData.max_vac_days}
                                 onChange={handleChange}
