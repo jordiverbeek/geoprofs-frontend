@@ -80,8 +80,12 @@ const Sidebar = () => {
 
     const handleVerlofAanvraag = (formDate, time, reason, customReason) => {
         setError('');
-        const date = new Date(formDate);
-        const formattedDate = date.toISOString().split('T')[0];
+        const offset = formDate.getTimezoneOffset()
+        var tmpDate = new Date(formDate.getTime() - (offset*60*1000))
+
+        const formattedDate = tmpDate.toISOString().split('T')[0];
+
+
 
         if (formattedDate === '1970-01-01' || formattedDate === '' || time === '' || reason === '' || (reason === '4' && customReason === '')) {
             setError('fill in the entire form');
@@ -100,10 +104,15 @@ const Sidebar = () => {
                 reasonAfternoon = reason;
             }
 
+            console.log(
+                formattedDate +
+                reasonMorning +
+                reasonAfternoon);
+
             axios.post(
                 'https://geoprofs-backend.vacso.cloud/api/attendance/create',
                 {
-                    date: date,
+                    date: formattedDate,
                     morning: reasonMorning,
                     afternoon: reasonAfternoon,
                     description: customReason,
