@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Sidebar from './components/Sidebar';
 import Register from "./pages/Register";
+import Planning from "./pages/Planning";
 import Manager from "./pages/Manager";
 import Werknemers from "./pages/Werknemers";
 
@@ -53,8 +54,10 @@ function AppContent({ showSidebar, setShowSidebar, isloggedin }) {
             {showSidebar && <Sidebar />}
             <section className='vlx-body'>
                 <Routes>
+                    {isloggedin ? '' : <Route path="/auth/login" element={<Login />} />}
 
-
+                    <Route path="/planning" element={<Planning />} />
+                    
                     {/* Authentication */}
                     <Route path="/" element={isloggedin ? <Home /> : <Login />} />
                     <Route path="/auth/login" element={<Login />} />
