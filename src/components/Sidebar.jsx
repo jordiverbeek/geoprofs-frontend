@@ -90,9 +90,11 @@ const Sidebar = () => {
             let reasonMorning = '';
             let reasonAfternoon = '';
             if (time === 'Ochtend') {
-                reasonMorning = reason;
+                var reasonMorning = reason;
+                var reasonAfternoon = 'aanwezig';
             } else if (time === 'Middag') {
-                reasonAfternoon = reason;
+                var reasonMorning = 'aanwezig';
+                var reasonAfternoon = reason;
             } else if (time === 'Hele dag') {
                 reasonMorning = reason;
                 reasonAfternoon = reason;
@@ -207,15 +209,17 @@ const Sidebar = () => {
                                 value={selectedReason}
                                 onChange={handleReasonChange}
                             >
-                                <option value='' disabled>Kies een reden</option>
-                                <option value="2">Vakantie</option>
-                                <option value="1">Ziekte</option>
-                                <option value="3">Persoonlijk</option>
-                                <option value="5">Zwangerschap</option>
-                                <option value="5">Ouderschaps</option>
-                                <option value="4">Overig</option>
+                                <option value='' disabled> Kies een reden </option>
+                                <option value="vakantie">Vakantie</option>
+                                <option value="ziek">Ziek</option>
+                                <option value="persoonlijk">Persoonlijk</option>
+                                <option value="zwangerschap">Zwangerschap</option>
+                                <option value="ouderschap">Ouderschap</option>
+                                <option value="overig">Overig</option>
                             </select>
-                            {selectedReason === '4' && (
+
+                            {/* Show text input when "Overig" is selected */}
+                            {selectedReason === 'overig' && (
                                 <>
                                     <label htmlFor="custom-reason">Specificeer uw reden:</label>
                                     <input
