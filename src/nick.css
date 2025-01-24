@@ -153,8 +153,6 @@ hr { margin: 0; border: none; border-top: 2px solid; margin-right: 20px;}
     background-color: #28a745; /* Groen voor werknemers */
 }
 
-.werknemer-verwijder{
-
 .dashboard .content { background-color: white; border-radius: 8px; padding: 30px; height: 100%; box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25); }
 
 .container-planning { width: 100%; height: 100%; display: flex; flex-direction: column; gap: 30px; }

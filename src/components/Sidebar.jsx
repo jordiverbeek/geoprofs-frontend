@@ -90,11 +90,11 @@ const Sidebar = () => {
             let reasonMorning = '';
             let reasonAfternoon = '';
             if (time === 'Ochtend') {
-                var reasonMorning = reason;
-                var reasonAfternoon = 'aanwezig';
+                reasonMorning = reason;
+                reasonAfternoon = 'aanwezig';
             } else if (time === 'Middag') {
-                var reasonMorning = 'aanwezig';
-                var reasonAfternoon = reason;
+                reasonMorning = 'aanwezig';
+                reasonAfternoon = reason;
             } else if (time === 'Hele dag') {
                 reasonMorning = reason;
                 reasonAfternoon = reason;
