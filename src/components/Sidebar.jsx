@@ -135,7 +135,7 @@ const Sidebar = () => {
                             <FontAwesomeIcon className='icons' icon={faCalendarDays} />
                             Dashboard
                         </Link>
-                        <Link to={'/werknemers'}>
+                        <Link id="werknemers-button" to={'/werknemers'}>
                             <FontAwesomeIcon className='icons' icon={faUserGroup} />
                             Werknemers
                         </Link>
@@ -148,14 +148,14 @@ const Sidebar = () => {
                             Verlof aanvragen
                         </Link>
                         {Manager && (
-                            <Link to={'/manager'}>
+                            <Link id="manager-dashboard-button" to={'/manager'}>
                                 <FontAwesomeIcon className='icons' icon={faCalendarDays} />
                                 Manager Dashboard
                             </Link>
                         )}
                     </div>
                     <div className='container-bot'>
-                        <Link to={"auth/login"} onClick={handleLogout}>
+                        <Link id='logout-button' to={"auth/login"} onClick={handleLogout}>
                             <FontAwesomeIcon className='icons' icon={faSignOut} />
                             Logout
                         </Link>
