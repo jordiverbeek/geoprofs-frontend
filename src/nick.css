@@ -1,10 +1,12 @@
-.register-from { display: flex; flex-direction: column; gap: 1.5rem; width: 100%; max-width: 400px; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+body { background-color: #D9D9D9; font-family: 'Ubuntu', sans-serif; margin: 0; padding: 0; }
+
+
+
+.register-from { display: flex; flex-direction: column; gap: 1.5rem; width: 100%; max-width: 400px; padding: 20px; background-color: white; border-radius: 8px;  }
 .register-from input { padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; width: 100%; }
-.register-from button { padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease; }
-.register-from button:hover { background-color: #0056b3; }
-h1 { font-size: 24px; margin-bottom: 20px; color: #333; }
-
-
+.register-from button { padding: 12px; background-color: #0984F5; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease; }
+.register-from button:hover { background-color: #0984F5; }
+/* h1 { font-size: 24px; margin-bottom: 20px; color: #333; } */
 
 
 
@@ -13,6 +15,145 @@ h1 { font-size: 24px; margin-bottom: 20px; color: #333; }
 .dashboard .widget { background-color: white; border-radius: 8px; padding: 16px; min-height: 150px; width: 25%; text-align: center; box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25); display: grid; place-content: center; }
 .dashboard .widget h3 { margin: 0; font-size: 18px; color: black; }
 .dashboard .widget p { font-size: 24px; font-weight: bold; color: black; margin: 5px 0 0 0; }
+.dashboard .content { background-color: white; border-radius: 8px; padding: 30px; height: 100%; box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25); }
+
+
+
+
+
+
+
+.werknemers { padding: 0px 20px 0px 20px; width: 100%; }
+.wernemers-container { display: flex; flex-direction: row; gap: 30px; background-color: white; border-radius: 5px; padding: 10px 20px 20px 20px; }
+.werknemers-header { color: #0984F5; font-size: 40px;}
+.werknemers .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background-color: white; padding: 14px; border-radius: 5px; }
+.werknemers .icon-plus { margin-right: 5px }
+.werknemers .toevoegen-knop { display: flex; padding: 10px 10px; background-color: white; border: solid 1px #0984F5; color: #0984F5; border-radius: 20px; cursor: pointer; }
+.toevoegen-knop:hover{ background-color: #0984F5; color: white; }
+
+.werknemer-groep { padding: 15px; margin-bottom: 30px; background: white; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);}
+.groep-naam { color: black; border-radius: 5px 5px 0 0; cursor: pointer;}
+.werknemer-groep h3 { margin-bottom: 10px; }
+
+hr { margin: 0; border: none; border-top: 2px solid; margin-right: 20px;}
+/* padding: 10px; --gc: 1; display: grid; grid-template-columns: repeat(var(--gc), minmax(0,1fr)); */
+.werknemer-lijst { display: flex; gap: 16px; flex-wrap: wrap; }
+.werknemer-kaart { width: auto; text-align: center; }
+.werknemer-foto { width:  160px; height: 160px; object-fit: cover; border-radius: 5px; }
+.werknemer-info { margin-top: 10px; }
+.werknemer-info h4 { font-size: 16px; margin: 5px 0; text-align: start; }
+
+.werknemer-info p { font-size: 14px; color: #666; text-align: start; }
+
+.container-form { text-align: center; width: 400px; max-height: 90%; padding: 20px; border-radius: 8px; background-color: #fff; overflow-y: auto; }
+::-webkit-scrollbar { width: 0px; }
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+.close-button { background-color: #ff4d4d; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-bottom: 15px; }
+
+@media (min-width: 576px) {
+    .werknemer-lijst { --gc: 1; }
+}
+@media (min-width: 768px) {
+    .werknemer-lijst { --gc: 1; }
+}
+@media (min-width: 992px) {
+    .werknemer-lijst { --gc: 3; }
+}
+@media (min-width: 1200px) {
+    .werknemer-lijst { --gc: 4; }
+}
+@media (min-width: 1400px) {
+    .werknemer-lijst { --gc: 5; }
+    
+}
+
+@media (max-width: 940px) {
+    .toevoegen-tekst { display: none; }
+    .werknemers .icon-plus { margin: 0px 3px; }
+    .toevoegen-knop { margin-left: 5px; }
+}
+
+@media (max-width: 786px) {
+    .werknemers { display: flex; flex-direction: column; width: 100%;  }
+    .vlx-main-page { display: flex; flex-direction: column; gap: 30px; padding: 30px; }
+}
+.dashboard .content { background-color: white; border-radius: 8px; padding: 30px; height: 100%; box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25); }
+
+.manager-container {
+    width: 100%;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, .25);
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.page-subtitle {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.werknemers-list {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 15px; /* Ruimte tussen de rows */
+}
+
+.werknemer-row {
+    width: 49%;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.werknemer-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.werknemer-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.werknemer-email {
+    font-size: 14px;
+    color: #555;
+}
+
+.role-tag {
+    font-size: 14px;
+    font-weight: normal;
+    margin-left: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: white;
+}
+
+.role-tag.manager {
+    background-color: #007bff; /* Blauw voor managers */
+}
+
+.role-tag.medewerker {
+    background-color: #28a745; /* Groen voor werknemers */
+}
+
+.werknemer-verwijder{
 
 .dashboard .content { background-color: white; border-radius: 8px; padding: 30px; height: 100%; box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25); }
 
