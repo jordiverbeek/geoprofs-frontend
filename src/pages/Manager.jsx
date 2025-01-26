@@ -61,7 +61,7 @@ const Manager = () => {
                             </div>
                             <div className="werknemer-email">{werknemer.email}</div>
                         </div>
-                        <div onClick={() => handleDelete(werknemer.id)} className='werknemer-verwijder'>  
+                        <div onClick={() => handleDelete(werknemer.id)} id='Delete_button' className='werknemer-verwijder'>  
                             <FontAwesomeIcon icon={faTrash} />
                         </div>
                     </div>
