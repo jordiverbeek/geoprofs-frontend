@@ -234,7 +234,7 @@ const Planning = () => {
                         Ma - Zo
                     </div>
                 </div>
-                <div className="planning-content">{loading ? <div>Loading...</div> : renderAgenda()}</div>
+                <div id="planning-content" className="planning-content">{loading ? <div>Loading...</div> : renderAgenda()}</div>
             </div>
         </div>
     );
