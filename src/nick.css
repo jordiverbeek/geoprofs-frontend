@@ -46,7 +46,7 @@ hr { margin: 0; border: none; border-top: 2px solid; margin-right: 20px;}
 .werknemer-info p { font-size: 14px; color: #666; text-align: start; }
 
 .container-form { text-align: center; width: 400px; max-height: 90%; padding: 20px; border-radius: 8px; background-color: #fff; overflow-y: auto; }
-::-webkit-scrollbar { width: 0px; }
+
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; }
 .close-button { background-color: #ff4d4d; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-bottom: 15px; }
 
@@ -225,11 +225,6 @@ hr { margin: 0; border: none; border-top: 2px solid; margin-right: 20px;}
 .dropdown-item:active {
     background-color: #dee2e6;
     transform: scale(0.95);
-}
-
-.dropdown-menu::-webkit-scrollbar {
-    width: 0;
-    height: 0;
 }
 
 .plan-Spacing{ 

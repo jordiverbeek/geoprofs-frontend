@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
@@ -8,6 +10,9 @@ import axios from 'axios';
 const Werknemers = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [werknemers, setWerknemers] = useState([]);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const [selectedRole, setSelectedRole] = useState('');
 
     const handleModalOpen = () => setIsModalOpen(true);
     const handleModalClose = () => setIsModalOpen(false);
@@ -28,21 +33,17 @@ const Werknemers = () => {
 
 
     const [formData, setFormData] = useState({
-        firstname: '',
-        lastname: '',
-        role_slug: 'medewerker',
+        first_name: '',
+        sure_name: '',
+        role_slug: '',
         email: '',
         password: '',
         bsn: '',
         date_of_service: '',
-        sick_days: '',
-        vacation_days: '',
-        personal_days: '',
-        max_vacation_days: ''
+        used_attendance: '',
+        max_attendance: ''
     });
 
-    const [errorMessage, setErrorMessage] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -59,6 +60,7 @@ const Werknemers = () => {
         setSuccessMessage('');
 
         console.log('Cookies:', Cookies.get("bearer_token"));
+        console.log('Form data:', formData);
 
         try {
             const response = await axios.post('https://geoprofs-backend.vacso.cloud/api/users/create', formData, {
@@ -78,15 +80,13 @@ const Werknemers = () => {
                 setFormData({
                     first_name: '',
                     sure_name: '',
-                    role_slug: 'medewerker',
+                    role_slug: '',
                     email: '',
                     password: '',
                     bsn: '',
                     date_of_service: '',
-                    sick_days: '',
-                    vac_days: '',
-                    personal_days: '',
-                    max_vac_days: ''
+                    used_attendance: '',
+                    max_attendance: ''
                 });
             } else {
                 setErrorMessage(response.data.message || 'Registration failed.');
@@ -95,6 +95,54 @@ const Werknemers = () => {
             setErrorMessage('An error occurred. Please try again.');
             console.error('Error:', error);
         }
+    };
+
+
+
+    useEffect(() => {
+        const fetchWerknemers = async () => {
+            try {
+                console.log('Bearer token:', Cookies.get('bearer_token'));
+                const response = await axios.get('https://geoprofs-backend.vacso.cloud/api/users', {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get("bearer_token")}`,
+                        'Content-Type': 'application/json',
+                        Accept: "application/json",
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                });
+                console.log('Response:', response.data);
+                setWerknemers(response.data.users || []);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        fetchWerknemers();
+    }, []);
+
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`https://geoprofs-backend.vacso.cloud/api/users/${id}/delete`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get("bearer_token")}`,
+                    'Content-Type': 'application/json',
+                    Accept: "application/json",
+                    'Access-Control-Allow-Origin': '*',
+                },
+            });
+            setWerknemers(werknemers.filter(werknemer => werknemer.id !== id));
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
+    };
+
+    const handleChangeRole = (e) => {
+        setSelectedRole(e.target.value);
+        setFormData({
+            ...formData,
+            role_slug: e.target.value
+        });
     };
 
     return (
@@ -113,17 +161,27 @@ const Werknemers = () => {
 
             {/* <WerknemerKaart  */}
 
-            <div className='wernemers-container'>
-                {werknemers?.map((werknemer) => (
-                    <div className="werknemers-lijst" key={werknemer.id}>
-                        <div className="werknemer-kaart">
-                            <div className="werknemer-info">
-                                <h4>{werknemer.first_name}</h4>
-                                <p>{werknemer.email}</p>
+            <div className="manager-container">
+                <div className="page-title">Manager</div>
+                <div className="page-subtitle">Overzicht van medewerkers</div>
+                <div className="werknemers-list">
+                    {werknemers.map((werknemer) => (
+                        <div className="werknemer-row" key={werknemer.id}>
+                            <div className="werknemer-col">
+                                <div className="werknemer-name">
+                                    {werknemer.first_name} {werknemer.sure_name}
+                                    <span className={`role-tag ${werknemer.role_slug}`}>
+                                        ({werknemer.role_slug === 'manager' ? 'Manager' : 'Werknemer'})
+                                    </span>
+                                </div>
+                                <div className="werknemer-email">{werknemer.email}</div>
+                            </div>
+                            <div onClick={() => handleDelete(werknemer.id)} id='Delete_button' className='werknemer-verwijder'>
+                                <FontAwesomeIcon icon={faTrash} />
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
 
 
@@ -170,6 +228,16 @@ const Werknemers = () => {
                                 onChange={handleChange}
                                 required
                             />
+                            <select
+                                id="role_slug"
+                                name='role_slug'
+                                value={selectedRole}
+                                onChange={handleChangeRole}
+                            >
+                                <option value='' disabled> Kies een reden </option>
+                                <option value="manager"> Manager </option>
+                                <option value="medewerker">Medewerker</option>
+                            </select>
                             <input
                                 type="text"
                                 name="bsn"
@@ -190,37 +258,19 @@ const Werknemers = () => {
                             />
                             <input
                                 type="number"
-                                name="sick_days"
-                                id='sick_days'
-                                placeholder="Sick days"
-                                value={formData.sick_days}
+                                name="used_attendance"
+                                id='used_attendance'
+                                placeholder="Gebruikte verlof dagen"
+                                value={formData.used_attendance}
                                 onChange={handleChange}
                                 required
                             />
                             <input
                                 type="number"
-                                name="vac_days"
-                                id='vac_days'
-                                placeholder="Vacation days"
-                                value={formData.vac_days}
-                                onChange={handleChange}
-                                required
-                            />
-                            <input
-                                type="number"
-                                name="personal_days"
-                                id='personal_days'
-                                placeholder="Personal days"
-                                value={formData.personal_days}
-                                onChange={handleChange}
-                                required
-                            />
-                            <input
-                                type="number"
-                                name="max_vac_days"
-                                id='max_vac_days'
-                                placeholder="Max vacation days"
-                                value={formData.max_vac_days}
+                                name="max_attendance"
+                                id='max_attendance'
+                                placeholder="Max verlof dagen"
+                                value={formData.max_attendance}
                                 onChange={handleChange}
                                 required
                             />
