@@ -149,7 +149,7 @@ const Sidebar = () => {
                                     <FontAwesomeIcon className='icons' icon={faUserGroup} />
                                     Werknemers
                                 </Link>
-                                <Link id="manager-dashboard-button" to={'/manager'}>
+                                <Link id="manager-dashboard-button" to={'/Verlof'}>
                                     <FontAwesomeIcon className='icons' icon={faCalendarDays} />
                                     Verlof
                                 </Link>
