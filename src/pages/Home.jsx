@@ -1,39 +1,51 @@
 import React, { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import { use } from 'react';
 
 const Home = () => {
-    const [token, setToken] = useState('');
 
-    // useEffect(() => {
-    //     const storedToken = localStorage.getItem('token');
-    //     if (storedToken) {
-    //         setToken(storedToken);
-    //     }
-    // }, [localStorage.getItem('token')]);
+    const [balance, setBalance] = useState([]);
+    const [user, setUser] = useState([]);
+    const [aanwezigheidsPercentage, setAanwezigheidsPercentage] = useState([]);
+    const [percentage, setPercentage] = useState([]);
 
-    // console.log(token);
-
+    useEffect(() => {
+        axios.get(`https://geoprofs-backend.vacso.cloud/api/balance`, {
+            headers: {
+                Authorization: `Bearer ${Cookies.get("bearer_token")}`,
+                'Content-Type': 'application/json',
+                Accept: "application/json",
+                'Access-Control-Allow-Origin': '*',
+            },
+        }).then(response => {
+            setBalance(response.data);
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+        setPercentage(Math.round((balance.used / balance.max) * 100));
+        setAanwezigheidsPercentage(percentage);
+    }, [balance]);
 
     return (
         <div data-testid='test-home' className='dashboard'>
             <div className='widgets'>
                 <div className='widget'>
-                    <h3>Aanwezigen</h3>
-                    <p>17</p>
+                    <h3>Ongebruikt verlof dagen</h3>
+                    <p>{balance.balance + " dagen"}</p>
                 </div>
                 <div className='widget'>
-                    <h3>Afwezigen</h3>
-                    <p>5</p>
+                    <h3>Gebruikte verlof dagen</h3>
+                    <p>{balance.used + " dagen"}</p>
                 </div>
                 <div className='widget'>
-                    <h3>ziekte percentage</h3>
-                    <p>100%</p>
+                    <h3>Max verlof dagen</h3>
+                    <p>{balance.max + " dagen"}</p>
                 </div>
                 <div className='widget'>
-                    <h3>Verlof uren</h3>
-                    <p>23</p>
+                    <h3>Aanwezigheids percentage</h3>
+                    <p>{aanwezigheidsPercentage + "%"}</p>
                 </div>
-            </div>
-            <div className='content'>
             </div>
 
         </div>

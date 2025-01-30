@@ -44,7 +44,7 @@ const Login = () => {
                             'Access-Control-Allow-Origin': '*',
                         },
                     }).then(response => {
-                        Cookies.set('user', response.data, {
+                        Cookies.set('user', JSON.stringify(response.data.user), {
                             expires: 1
                         });
                         Cookies.set('role', response.data.user.role_slug, {
