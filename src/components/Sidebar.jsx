@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import { faHome, faCalendarDays, faUserGroup, faSignOut, faPlus, faBell } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faCalendarDays, faUserGroup, faSignOut, faPlus, faBell, faBars } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import enGB from 'date-fns/locale/en-GB';
 import Cookies from 'js-cookie';
+
 
 const Sidebar = () => {
     const navigate = useNavigate();
@@ -20,6 +21,7 @@ const Sidebar = () => {
     const [Manager, setManager] = useState(false);
     const [message, setMessage] = useState('');
     const date = new Date();
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         setManager(Cookies.get('role') === 'manager');
@@ -135,6 +137,131 @@ const Sidebar = () => {
 
     return (
         <>
+            <div className="container-dropdown">
+                {/* Clickable icon */}
+                <div onClick={() => setIsOpen(!isOpen)}>
+                    <FontAwesomeIcon className="icons dropdown" icon={faBars} />
+                </div>
+
+                {/* Sidebar */}
+                <div className={`sidebar ${isOpen ? "open" : ""}`}>
+                    <section data-testid="testSidebar" className='vlx-mobile-sidebar'>
+                        <div className='container'>
+                            <div className='container-top'>
+                                <button className="close-btn" onClick={() => setIsOpen(false)}>✖</button>
+                                <h1 onClick={() => navigate('/')}>Verlof Systeem</h1>
+                                <Link onClick={() => setIsOpen(false)} to={'/'}>
+                                    <FontAwesomeIcon className='icons' icon={faHome} />
+                                    Dashboard
+                                </Link>
+                                {Manager && (
+                                    <>
+                                        <Link onClick={() => setIsOpen(false)} id="werknemers-button" to={'/werknemers'}>
+                                            <FontAwesomeIcon className='icons' icon={faUserGroup} />
+                                            Werknemers
+                                        </Link>
+                                        <Link onClick={() => setIsOpen(false)} id="manager-dashboard-button" to={'/Verlof'}>
+                                            <FontAwesomeIcon className='icons' icon={faBell} />
+                                            Verlof
+                                        </Link>
+                                    </>
+                                )}
+                                <Link onClick={() => setIsOpen(false)} id="planning-button" to={'/planning'}>
+                                    <FontAwesomeIcon className='icons' icon={faCalendarDays} />
+                                    Planning
+                                </Link>
+                                <Link id='verlof-aanvraag-button' onClick={toggleModal}>
+                                    <FontAwesomeIcon className='icons' icon={faPlus} />
+                                    Verlof aanvragen
+                                </Link>
+                            </div>
+                            <div className='container-bot'>
+                                <Link id='logout-button' to={"auth/login"} onClick={handleLogout}>
+                                    <FontAwesomeIcon className='icons' icon={faSignOut} />
+                                    Logout
+                                </Link>
+                            </div>
+                        </div>
+                    </section>
+                    {isModalOpen && (
+                        <div className="modal-overlay" onClick={closeModal}>
+                            <div className="modal-content">
+                                <h2>Verlof aanvragen</h2>
+                                {error && <p className="error">{error}</p>}
+                                {message && <p className='success'>{message}</p>}
+                                <div className="body">
+                                    <h3>Datum</h3>
+                                    <DatePicker
+                                        id="date-picker"
+                                        selected={selectedDate}
+                                        onChange={(date) => setSelectedDate(date)}
+                                        dateFormat="dd/MM/yyyy"
+                                        minDate={date}
+                                        placeholderText="Selecteer een datum"
+                                        locale={enGB}
+                                    />
+                                    <h3>Tijd</h3>
+                                    <div className="buttons-tijd-container">
+                                        <button
+                                            className={selectedButton === 'Ochtend' ? 'selected' : ''}
+                                            onClick={() => handleClick('Ochtend')}
+                                            id="ochtend"
+                                        >
+                                            Ochtend
+                                        </button>
+                                        <button
+                                            className={selectedButton === 'Middag' ? 'selected' : ''}
+                                            onClick={() => handleClick('Middag')}
+                                            id="middag"
+                                        >
+                                            Middag
+                                        </button>
+                                        <button
+                                            id="hele-dag"
+                                            className={selectedButton === 'Hele dag' ? 'selected' : ''}
+                                            onClick={() => handleClick('Hele dag')}
+                                        >
+                                            Hele dag
+                                        </button>
+                                    </div>
+                                    <h3>Verlof reden</h3>
+                                    <select
+                                        id="verlof-reden"
+                                        value={selectedReason}
+                                        onChange={handleReasonChange}
+                                    >
+                                        <option value='' disabled> Kies een reden </option>
+                                        <option value="vakantie">Vakantie</option>
+                                        <option value="ziek">Ziek</option>
+                                        <option value="persoonlijk">Persoonlijk</option>
+                                        <option value="zwangerschap">Zwangerschap</option>
+                                        <option value="ouderschap">Ouderschap</option>
+                                        <option value="overig">Overig</option>
+                                    </select>
+
+                                    {/* Show text input when "Overig" is selected */}
+                                    {selectedReason === 'overig' && (
+                                        <>
+                                            <label htmlFor="custom-reason">Specificeer uw reden:</label>
+                                            <input
+                                                type="text"
+                                                id="custom-reason"
+                                                value={customReason}
+                                                onChange={handleCustomReasonChange}
+                                                placeholder="Uw reden..."
+                                            />
+                                        </>
+                                    )}
+                                </div>
+                                <div className="btn-group btn-group--vert">
+                                    <button className='btn btn--small' id='submit' onClick={() => handleVerlofAanvraag(selectedDate, selectedButton, selectedReason, customReason)}>Bevestigen</button>
+                                    <button className='btn btn--small' onClick={toggleModal}>Sluiten</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
             <section data-testid="testSidebar" className='vlx-sidebar'>
                 <div className='container'>
                     <div className='container-top'>
