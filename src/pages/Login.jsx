@@ -27,16 +27,35 @@ const Login = () => {
                 headers: {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*',
-                
+
                 }
             })
                 .then(response => {
                     setLoading(false);
-                    
+
                     Cookies.set('bearer_token', response.data.access_token, {
                         expires: 1
-                    }); 
-                    
+                    });
+
+                    axios.get('https://geoprofs-backend.vacso.cloud/api/user', {
+                        headers: {
+                            'Authorization': `Bearer ${Cookies.get('bearer_token')}`,
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': '*',
+                        },
+                    }).then(response => {
+                        Cookies.set('user', JSON.stringify(response.data.user), {
+                            expires: 1
+                        });
+                        Cookies.set('role', response.data.user.role_slug, {
+                            expires: 1
+                        });
+                       
+                    }).catch(error => {
+                        console.error('Error:', error);
+                    });
+
+
                     console.log('Cookie set:', Cookies.get('bearer_token'));
                     navigate('/');
                 })
@@ -70,7 +89,7 @@ const Login = () => {
                         <label>Password</label>
                         <input id='password' type="password" aria-label='password' onChange={(e) => setPassword(e.target.value)} />
                     </div>
-                    <button id='login-button' type="submit"  onClick={sendForm}>Login</button>
+                    <button id='login-button' type="submit" onClick={sendForm}>Login</button>
                     <Link to={""}>
                         Wachtwoord vergeten?
                     </Link>

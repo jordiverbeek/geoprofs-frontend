@@ -10,11 +10,11 @@ body { background-color: #D9D9D9; font-family: 'Ubuntu', sans-serif; margin: 0; 
 
 
 
-.dashboard { width: 100%; display: flex; flex-direction: column; gap: 30px; }
-.dashboard .widgets { display: flex; justify-content: space-between; gap: 30px; }
-.dashboard .widget { background-color: white; border-radius: 8px; padding: 16px; min-height: 150px; width: 25%; text-align: center; box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25); display: grid; place-content: center; }
-.dashboard .widget h3 { margin: 0; font-size: 18px; color: black; }
-.dashboard .widget p { font-size: 24px; font-weight: bold; color: black; margin: 5px 0 0 0; }
+.dashboard { width: 100%; height: 100% flex; flex-direction: column; gap: 30px; }
+.dashboard .widgets { --gc: 2; display: grid; grid-template-columns: repeat(var(--gc), 1fr); gap: 30px; width: 100%; height: 100%;}
+.dashboard .widget { background-color: white; border-radius: 8px; padding: 16px; height: auto; text-align: center; box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25); display: grid; place-content: center;}
+.dashboard .widget h3 { margin: 0; font-size: 32px; color: black; }
+.dashboard .widget p { font-size: 24px; font-weight: lighter; color: black; margin: 5px 0 0 0; }
 .dashboard .content { background-color: white; border-radius: 8px; padding: 30px; height: 100%; box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25); }
 
 
@@ -46,7 +46,7 @@ hr { margin: 0; border: none; border-top: 2px solid; margin-right: 20px;}
 .werknemer-info p { font-size: 14px; color: #666; text-align: start; }
 
 .container-form { text-align: center; width: 400px; max-height: 90%; padding: 20px; border-radius: 8px; background-color: #fff; overflow-y: auto; }
-::-webkit-scrollbar { width: 0px; }
+
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; }
 .close-button { background-color: #ff4d4d; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-bottom: 15px; }
 
@@ -225,11 +225,6 @@ hr { margin: 0; border: none; border-top: 2px solid; margin-right: 20px;}
 .dropdown-item:active {
     background-color: #dee2e6;
     transform: scale(0.95);
-}
-
-.dropdown-menu::-webkit-scrollbar {
-    width: 0;
-    height: 0;
 }
 
 .plan-Spacing{ 

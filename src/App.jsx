@@ -6,7 +6,7 @@ import Login from './pages/Login';
 import Sidebar from './components/Sidebar';
 import Register from "./pages/Register";
 import Planning from "./pages/Planning";
-import Manager from "./pages/Manager";
+import Verlof from "./pages/Verlof";
 import Werknemers from "./pages/Werknemers";
 
 function App() {
@@ -62,7 +62,7 @@ function AppContent({ showSidebar, setShowSidebar, isloggedin }) {
                     <Route path="/" element={isloggedin ? <Home /> : <Login />} />
                     <Route path="/auth/login" element={<Login />} />
                     <Route path="/auth/register" element={<Register />} />
-                    <Route path="/Manager" element={<Manager/>} />
+                    <Route path="/Verlof" element={<Verlof/>} />
                     <Route path="/werknemers" element={<Werknemers />} />
                 </Routes>
             </section>

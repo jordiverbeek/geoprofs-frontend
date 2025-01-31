@@ -23,8 +23,7 @@ const Sidebar = () => {
 
     useEffect(() => {
         setManager(Cookies.get('role') === 'manager');
-        setManager(true);
-    }, []);
+    }, [Cookies.get('role')]);
 
     const handleClick = (button) => {
         setSelectedButton(button);
@@ -81,7 +80,7 @@ const Sidebar = () => {
     const handleVerlofAanvraag = (formDate, time, reason, customReason) => {
         setError('');
         const offset = formDate.getTimezoneOffset()
-        var tmpDate = new Date(formDate.getTime() - (offset*60*1000))
+        var tmpDate = new Date(formDate.getTime() - (offset * 60 * 1000))
 
         const formattedDate = tmpDate.toISOString().split('T')[0];
 
@@ -144,10 +143,18 @@ const Sidebar = () => {
                             <FontAwesomeIcon className='icons' icon={faCalendarDays} />
                             Dashboard
                         </Link>
-                        <Link id="werknemers-button" to={'/werknemers'}>
-                            <FontAwesomeIcon className='icons' icon={faUserGroup} />
-                            Werknemers
-                        </Link>
+                        {Manager && (
+                            <>
+                                <Link id="werknemers-button" to={'/werknemers'}>
+                                    <FontAwesomeIcon className='icons' icon={faUserGroup} />
+                                    Werknemers
+                                </Link>
+                                <Link id="manager-dashboard-button" to={'/Verlof'}>
+                                    <FontAwesomeIcon className='icons' icon={faCalendarDays} />
+                                    Verlof
+                                </Link>
+                            </>
+                        )}
                         <Link id="planning-button" to={'/planning'}>
                             <FontAwesomeIcon className='icons' icon={faCalendarDays} />
                             Planning
@@ -156,12 +163,6 @@ const Sidebar = () => {
                             <FontAwesomeIcon className='icons' icon={faCalendarDays} />
                             Verlof aanvragen
                         </Link>
-                        {Manager && (
-                            <Link id="manager-dashboard-button" to={'/manager'}>
-                                <FontAwesomeIcon className='icons' icon={faCalendarDays} />
-                                Manager Dashboard
-                            </Link>
-                        )}
                     </div>
                     <div className='container-bot'>
                         <Link id='logout-button' to={"auth/login"} onClick={handleLogout}>
