@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Sidebar from './components/Sidebar';
+import Hamburger from './components/Hamburger';
 import Register from "./pages/Register";
 import Planning from "./pages/Planning";
 import Verlof from "./pages/Verlof";
@@ -11,6 +12,7 @@ import Werknemers from "./pages/Werknemers";
 
 function App() {
     const [showSidebar, setShowSidebar] = useState(true);
+    const [showHamburger, setShowHamburger] = useState(true);
     const [isloggedin, setIsloggedin] = useState(false);
     const navigate = useNavigate();
 
@@ -52,6 +54,7 @@ function AppContent({ showSidebar, setShowSidebar, isloggedin }) {
     return (
         <>
             {showSidebar && <Sidebar />}
+            {/* {showHamburger && <Hamburger />} */}
             <section className='vlx-body'>
                 <Routes>
                     {isloggedin ? '' : <Route path="/auth/login" element={<Login />} />}
