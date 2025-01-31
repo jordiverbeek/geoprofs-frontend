@@ -90,9 +90,6 @@ const Login = () => {
                         <input id='password' type="password" aria-label='password' onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     <button id='login-button' type="submit" onClick={sendForm}>Login</button>
-                    <Link to={""}>
-                        Wachtwoord vergeten?
-                    </Link>
                 </div>
             </div>
         </section>

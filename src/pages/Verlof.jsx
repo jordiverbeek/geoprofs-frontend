@@ -70,7 +70,7 @@ const Verlof = () => {
 
      return (
           <section className="verlof">
-               <div className="header-verlof">
+               <div className="container-header container-header--verlof">
                     <h2>Verlof</h2>
                </div>
                <div className="verlof-content">
@@ -102,7 +102,7 @@ const Verlof = () => {
                                                   ) : aanvraag.status === "afgewezen" ? (
                                                        <p className="rejected-text">❌ Afgewezen</p>
                                                   ) : (
-                                                       <div className="button-container">
+                                                       <div className="btn-group btn-group--left">
                                                             <button className="approve-btn" onClick={() => handleAction(aanvraag.id, "goedgekeurd")}>Toestaan</button>
                                                             <button className="reject-btn" onClick={() => handleAction(aanvraag.id, "afgewezen")}>Afwijzen</button>
                                                        </div>

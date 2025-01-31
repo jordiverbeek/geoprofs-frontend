@@ -135,7 +135,7 @@ const Planning = () => {
         return (
             <>
                 <div className="user-container">
-                    <div className={selectedButton === "ma-zo" ? "planning-header-ma-zo" : "planning-header"}>Werknemers</div>
+                    <div className={selectedButton === "ma-zo" ? "planning-header-ma-zo" : "planning-header-ma-vr"}>Werknemers</div>
                     {users.map((user) => (
                         <div key={user} className="task">
                             {user}
@@ -168,7 +168,7 @@ const Planning = () => {
                                                         {userTask.afternoon === 'aanwezig' ? (
                                                             <>
                                                                 <div className="task-user-morning">
-                                                                    {userTask.morning === 'aanwezig' ? <></> : userTask.morning}
+                                                                    {userTask.morning === 'aanwezig' ? <></> : userTask.morning.slice(0,3)}
                                                                 </div>
                                                                 <div className="task-user-afternoon"></div>
                                                             </>
@@ -176,7 +176,7 @@ const Planning = () => {
                                                             <>
                                                                 {userTask.morning === 'aanwezig'}
                                                                 <div className="task-user-morning"></div>
-                                                                <div className="task-user-afternoon">{userTask.afternoon}</div>
+                                                                <div className="task-user-afternoon">{userTask.afternoon.slice(0,3)}</div>
                                                             </>
                                                         )}
                                                     </>
@@ -198,9 +198,11 @@ const Planning = () => {
 
     return (
         <div className="container-planning">
-            <div className="header-planning">
+
+            <div className="container-header container-header--planning">
                 <h2>Planning</h2>
             </div>
+
             <div className="planning-content-header">
                 <div className="planning-nav">
                     <button className="planning-nav-item small-btn" onClick={() => changeWeekNumber("previous")}>

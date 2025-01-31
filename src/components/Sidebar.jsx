@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import { faCalendarDays, faUserGroup, faSignOut } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faCalendarDays, faUserGroup, faSignOut, faPlus, faBell } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import enGB from 'date-fns/locale/en-GB';
@@ -140,7 +140,7 @@ const Sidebar = () => {
                     <div className='container-top'>
                         <h1 onClick={() => navigate('/')}>Verlof Systeem</h1>
                         <Link to={'/'}>
-                            <FontAwesomeIcon className='icons' icon={faCalendarDays} />
+                            <FontAwesomeIcon className='icons' icon={faHome} />
                             Dashboard
                         </Link>
                         {Manager && (
@@ -150,7 +150,7 @@ const Sidebar = () => {
                                     Werknemers
                                 </Link>
                                 <Link id="manager-dashboard-button" to={'/Verlof'}>
-                                    <FontAwesomeIcon className='icons' icon={faCalendarDays} />
+                                    <FontAwesomeIcon className='icons' icon={faBell} />
                                     Verlof
                                 </Link>
                             </>
@@ -160,7 +160,7 @@ const Sidebar = () => {
                             Planning
                         </Link>
                         <Link id='verlof-aanvraag-button' onClick={toggleModal}>
-                            <FontAwesomeIcon className='icons' icon={faCalendarDays} />
+                            <FontAwesomeIcon className='icons' icon={faPlus} />
                             Verlof aanvragen
                         </Link>
                     </div>
@@ -242,9 +242,9 @@ const Sidebar = () => {
                                 </>
                             )}
                         </div>
-                        <div className="modal-bottom">
-                            <button onClick={toggleModal}>Annuleren</button>
-                            <button id='submit' onClick={() => handleVerlofAanvraag(selectedDate, selectedButton, selectedReason, customReason)}>Bevestigen</button>
+                        <div className="btn-group btn-group--vert">
+                            <button className='btn btn--small' id='submit' onClick={() => handleVerlofAanvraag(selectedDate, selectedButton, selectedReason, customReason)}>Bevestigen</button>
+                            <button className='btn btn--small' onClick={toggleModal}>Sluiten</button>
                         </div>
                     </div>
                 </div>

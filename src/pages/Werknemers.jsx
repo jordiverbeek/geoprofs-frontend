@@ -146,24 +146,21 @@ const Werknemers = () => {
     };
 
     return (
-        <section className='werknemers' >
-            <header className="header">
-                <h1 className='werknemers-header'>Werknemers</h1>
-                <button id='Register-user' className="toevoegen-knop" onClick={handleModalOpen}>
-                    <FontAwesomeIcon className='icon-plus' icon={faPlus} />
-                    <p className='toevoegen-tekst'>
-                        Werknemer toevoegen
-                    </p>
+        <section className='container-werknemers'>
+            <div className="container-header container-header--werknemers">
+                <h2>Werknemers</h2>
+
+                <button id='register-user' className="btn btn--outline" onClick={handleModalOpen}>
+                    <i className="vlx-icon vlx-icon--plus vlx-icon--small"></i>
+                    <p> Werknemer toevoegen </p>
                 </button>
-            </header>
+            </div>
 
 
 
             {/* <WerknemerKaart  */}
 
             <div className="manager-container">
-                <div className="page-title">Manager</div>
-                <div className="page-subtitle">Overzicht van medewerkers</div>
                 <div className="werknemers-list">
                     {werknemers.map((werknemer) => (
                         <div className="werknemer-row" key={werknemer.id}>
@@ -171,13 +168,13 @@ const Werknemers = () => {
                                 <div className="werknemer-name">
                                     {werknemer.first_name} {werknemer.sure_name}
                                     <span className={`role-tag ${werknemer.role_slug}`}>
-                                        ({werknemer.role_slug === 'manager' ? 'Manager' : 'Werknemer'})
+                                        ({werknemer.role_slug.charAt(0).toUpperCase() + werknemer.role_slug.slice(1)})
                                     </span>
                                 </div>
                                 <div className="werknemer-email">{werknemer.email}</div>
                             </div>
                             <div onClick={() => handleDelete(werknemer.id)} id='Delete_button' className='werknemer-verwijder'>
-                                <FontAwesomeIcon icon={faTrash} />
+                                <i className='vlx-icon vlx-icon--trash'></i>
                             </div>
                         </div>
                     ))}
@@ -189,97 +186,101 @@ const Werknemers = () => {
             {/* Modal voor Register Formulier */}
             {isModalOpen && (
                 <div className="modal-overlay">
-                    <div className="container-form">
-                        <h1>Register</h1>
+                    <div className="modal-content">
+                        <h2>Register</h2>
                         <form onSubmit={handleSubmit} className="register-from">
-                            <input
-                                type="text"
-                                name="first_name"
-                                id='first_name'
-                                placeholder="Firstname"
-                                value={formData.first_name}
-                                onChange={handleChange}
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="sure_name"
-                                id='sure_name'
-                                placeholder="Lastname"
-                                value={formData.sure_name}
-                                onChange={handleChange}
-                                required
-                            />
-                            <input
-                                type="email"
-                                name="email"
-                                id='email'
-                                placeholder="Email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                required
-                            />
-                            <input
-                                type="password"
-                                name="password"
-                                id='password'
-                                placeholder="Password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                required
-                            />
-                            <select
-                                id="role_slug"
-                                name='role_slug'
-                                value={selectedRole}
-                                onChange={handleChangeRole}
-                            >
-                                <option value='' disabled> Kies een reden </option>
-                                <option value="manager"> Manager </option>
-                                <option value="medewerker">Medewerker</option>
-                            </select>
-                            <input
-                                type="text"
-                                name="bsn"
-                                id='bsn'
-                                placeholder="Bsn"
-                                value={formData.bsn}
-                                onChange={handleChange}
-                                required
-                            />
-                            <input
-                                type="date"
-                                name="date_of_service"
-                                id='date_of_service'
-                                placeholder="Date of service"
-                                value={formData.date_of_service}
-                                onChange={handleChange}
-                                required
-                            />
-                            <input
-                                type="number"
-                                name="used_attendance"
-                                id='used_attendance'
-                                placeholder="Gebruikte verlof dagen"
-                                value={formData.used_attendance}
-                                onChange={handleChange}
-                                required
-                            />
-                            <input
-                                type="number"
-                                name="max_attendance"
-                                id='max_attendance'
-                                placeholder="Max verlof dagen"
-                                value={formData.max_attendance}
-                                onChange={handleChange}
-                                required
-                            />
+                            <div className="body">
+                                <input
+                                    type="text"
+                                    name="first_name"
+                                    id='first_name'
+                                    placeholder="Firstname"
+                                    value={formData.first_name}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    name="sure_name"
+                                    id='sure_name'
+                                    placeholder="Lastname"
+                                    value={formData.sure_name}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                <input
+                                    type="email"
+                                    name="email"
+                                    id='email'
+                                    placeholder="Email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                <input
+                                    type="password"
+                                    name="password"
+                                    id='password'
+                                    placeholder="Password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                <select
+                                    id="role_slug"
+                                    name='role_slug'
+                                    value={selectedRole}
+                                    onChange={handleChangeRole}
+                                >
+                                    <option value='' disabled>Kies een reden</option>
+                                    <option value="manager"> Manager </option>
+                                    <option value="medewerker">Medewerker</option>
+                                </select>
+                                <input
+                                    type="text"
+                                    name="bsn"
+                                    id='bsn'
+                                    placeholder="Bsn"
+                                    value={formData.bsn}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                <input
+                                    type="date"
+                                    name="date_of_service"
+                                    id='date_of_service'
+                                    placeholder="Date of service"
+                                    value={formData.date_of_service}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                <input
+                                    type="number"
+                                    name="used_attendance"
+                                    id='used_attendance'
+                                    placeholder="Gebruikte verlof dagen"
+                                    value={formData.used_attendance}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                <input
+                                    type="number"
+                                    name="max_attendance"
+                                    id='max_attendance'
+                                    placeholder="Max verlof dagen"
+                                    value={formData.max_attendance}
+                                    onChange={handleChange}
+                                    required
+                                />
 
-                            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-                            {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-
-                            <button type="submit">Register</button>
-                            <button onClick={handleModalClose}>Sluiten</button>
+                                {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+                                {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+                            </div>
+                            
+                            <div className="btn-group btn-group--vert">
+                                <button className='btn btn--small' type="submit">Register</button>
+                                <button className='btn btn--small' onClick={handleModalClose}>Sluiten</button>
+                            </div>
                         </form>
                     </div>
                 </div>
